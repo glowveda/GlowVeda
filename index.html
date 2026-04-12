@@ -43,9 +43,8 @@ window._fb = { auth, db, storage, provider, signInWithPopup, signOut, onAuthStat
 onAuthStateChanged(auth, async user => {
   window._currentUser = user;
   updateAuthUI(user);
-  if(user) await loadUserCart(); 
   
-  // Background Sync after fast local load
+  // Background Sync
   loadFirestoreProducts();
   loadFirestoreBlogs();
   loadFirestoreCats(); 
@@ -76,15 +75,10 @@ nav.scrolled{height:60px;box-shadow:0 4px 30px rgba(232,48,90,0.1)}
 .nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;right:0;height:2px;background:var(--rose);transform:scaleX(0);transition:transform .3s;border-radius:2px}
 .nav-links a:hover{color:var(--rose)}.nav-links a:hover::after{transform:scaleX(1)}
 .nav-actions{display:flex;align-items:center;gap:10px}
-.btn-nav{padding:9px 20px;border-radius:50px;background:linear-gradient(135deg,var(--rose),var(--rose-light));color:white;border:none;cursor:pointer;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;transition:all .3s;box-shadow:0 4px 15px rgba(232,48,90,0.35)}
-.btn-nav:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(232,48,90,0.45)}
 .btn-outline{padding:9px 20px;border-radius:50px;border:1.5px solid var(--rose);background:transparent;color:var(--rose);cursor:pointer;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;transition:all .3s}
 .btn-outline:hover{background:var(--rose-pale)}
 .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:5px}
 .hamburger span{width:24px;height:2px;background:var(--rose);border-radius:2px;transition:all .3s}
-.cart-wrap{position:relative}
-.cart-badge{position:absolute;top:-6px;right:-6px;width:18px;height:18px;border-radius:50%;background:var(--rose);color:#fff;font-size:10px;font-weight:700;display:none;align-items:center;justify-content:center}
-.cart-badge.show{display:flex}
 .user-avatar{width:34px;height:34px;border-radius:50%;object-fit:cover;cursor:pointer;border:2px solid var(--rose);display:none}
 .user-avatar.show{display:block}
 
@@ -221,8 +215,6 @@ section{padding:90px 5%}
 .pimg{height:220px;display:flex;align-items:center;justify-content:center;font-size:70px;position:relative;overflow:hidden}
 .pimg img {width:100%; height:100%; object-fit:cover;}
 .ptag{position:absolute;top:12px;left:12px;background:linear-gradient(135deg,var(--rose),var(--rose-light));color:#fff;padding:5px 12px;border-radius:50px;font-size:11px;font-weight:600}
-.wbtn{position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:50%;background:#fff;border:none;cursor:pointer;font-size:16px;box-shadow:0 2px 10px rgba(0,0,0,0.1);transition:all .2s;display:flex;align-items:center;justify-content:center}
-.wbtn:hover,.wbtn.on{background:var(--rose);transform:scale(1.15)}
 .pinfo{padding:18px; flex:1; display:flex; flex-direction:column;}
 .pcat{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--rose);font-weight:600;margin-bottom:6px}
 .pname{font-weight:700;font-size:15px;margin-bottom:6px;color:var(--dark)}
@@ -234,11 +226,9 @@ section{padding:90px 5%}
 .pbtns {display:flex; gap:8px;}
 .acbtn{padding:9px 18px;border-radius:50px;background:var(--rose-pale);border:none;color:var(--rose);cursor:pointer;font-size:13px;font-weight:600;font-family:'DM Sans',sans-serif;transition:all .2s}
 .acbtn:hover{background:var(--rose);color:#fff}
-.linkbtn {padding:9px 12px;border-radius:50px;background:var(--dark);border:none;color:#fff;cursor:pointer;font-size:13px;font-weight:600;text-decoration:none;transition:all .2s}
-.linkbtn:hover {background:var(--rose);}
 .stars{color:var(--gold);font-size:13px;margin-bottom:8px}
 
-/* NEWSLETTER, FOOTER, CART, MODAL, TOAST */
+/* NEWSLETTER, FOOTER, MODAL, TOAST */
 .news-section{background:linear-gradient(135deg,var(--dark),var(--dark2))}
 .news-wrap{max-width:700px;margin:0 auto;text-align:center}
 .news-wrap .stitle{color:#fff}
@@ -264,28 +254,6 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
 .fcontact p {font-size: 14px; margin-bottom: 12px; display:flex; align-items:flex-start; gap:8px;}
 .fbot{max-width:1200px;margin:0 auto;border-top:1px solid rgba(255,255,255,0.1);padding-top:24px;display:flex;justify-content:space-between;align-items:center;font-size:13px;flex-wrap:wrap;gap:12px}
 
-.cart-ov{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:2000;opacity:0;pointer-events:none;transition:opacity .3s}.cart-ov.open{opacity:1;pointer-events:all}
-.cart-sb{position:fixed;right:0;top:0;bottom:0;width:380px;background:#fff;z-index:2001;transform:translateX(100%);transition:transform .3s;display:flex;flex-direction:column;box-shadow:-10px 0 40px rgba(0,0,0,0.15)}.cart-sb.open{transform:translateX(0)}
-.cart-hd{padding:24px;border-bottom:1px solid rgba(232,48,90,0.1);display:flex;justify-content:space-between;align-items:center}
-.cart-hd h3{font-family:'Playfair Display',serif;font-size:22px}
-.cart-cl{width:36px;height:36px;border-radius:50%;border:none;background:var(--rose-pale);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all .2s}.cart-cl:hover{background:var(--rose);color:#fff}
-.cart-items{flex:1;overflow-y:auto;padding:20px}
-.cempty{text-align:center;padding:60px 20px;color:var(--muted)}.cempty .ei{font-size:60px;margin-bottom:16px}
-.citem{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid rgba(232,48,90,0.08)}
-.cimg{width:60px;height:60px;border-radius:12px;background:var(--rose-pale);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0; overflow:hidden;}
-.cimg img {width:100%;height:100%;object-fit:cover;}
-.cinfo{flex:1}
-.cname{font-weight:600;font-size:14px;margin-bottom:4px}
-.cqty{display:flex;align-items:center;gap:8px;margin:6px 0}
-.qbtn2{width:24px;height:24px;border-radius:50%;border:1px solid rgba(232,48,90,0.3);background:#fff;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:all .2s;font-family:'DM Sans',sans-serif}.qbtn2:hover{background:var(--rose);color:#fff;border-color:var(--rose)}
-.qnum{font-weight:600;font-size:14px;min-width:20px;text-align:center}
-.cpr{color:var(--rose);font-weight:600;font-size:14px}
-.crm{border:none;background:none;cursor:pointer;color:var(--muted);font-size:18px;transition:color .2s;align-self:flex-start}.crm:hover{color:var(--rose)}
-.cart-ft{padding:20px 24px;border-top:1px solid rgba(232,48,90,0.1)}
-.ctotal{display:flex;justify-content:space-between;font-weight:700;font-size:18px;margin-bottom:6px}
-.csave{font-size:13px;color:#16a34a;margin-bottom:14px;font-weight:500}
-.cobtn{width:100%;padding:16px;border-radius:14px;background:linear-gradient(135deg,var(--rose),var(--rose-light));color:#fff;border:none;cursor:pointer;font-size:16px;font-weight:600;font-family:'DM Sans',sans-serif;transition:all .3s;box-shadow:var(--sh)}.cobtn:hover{transform:translateY(-2px)}.cobtn:disabled{opacity:.6;cursor:not-allowed;transform:none}
-
 .mov{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:3000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;padding:20px}.mov.open{opacity:1;pointer-events:all}
 .modal{background:#fff;border-radius:24px;max-width:800px;width:100%;padding:36px;position:relative;animation:modalIn .4s;max-height:90vh;overflow-y:auto}
 @keyframes modalIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
@@ -298,6 +266,7 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
 .mnav a{font-family:'Playfair Display',serif;font-size:22px;color:var(--dark);text-decoration:none;font-weight:700;transition:color .2s}.mnav a:hover{color:var(--rose)}
 .mncl{position:absolute;top:24px;right:24px;width:44px;height:44px;border-radius:50%;border:none;background:var(--rose-pale);cursor:pointer;font-size:22px;display:flex;align-items:center;justify-content:center}
 
+/* SIGN IN MODAL FIX */
 .login-modal{background:#fff;border-radius:24px;max-width:420px;width:100%;padding:40px;position:relative;animation:modalIn .4s;text-align:center}
 .login-modal h2{font-family:'Playfair Display',serif;font-size:28px;margin-bottom:8px;color:var(--dark)}
 .login-modal p{color:var(--muted);font-size:15px;margin-bottom:28px}
@@ -376,7 +345,7 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
 
 /* RESPONSIVE */
 @media(max-width:1024px){.feat-grid{grid-template-columns:repeat(2,1fr)}.prod-grid{grid-template-columns:repeat(2,1fr)}.cats-grid{grid-template-columns:repeat(3,1fr)}.fgrid{grid-template-columns:1fr 1fr}.blog-grid{grid-template-columns:repeat(2, 1fr);}}
-@media(max-width:768px){.nav-links,.btn-nav{display:none}.hamburger{display:flex}.hero-content{grid-template-columns:1fr;text-align:center}.hero-visual{display:none}.hero-actions{justify-content:center}.hero-stats{justify-content:center}.chat-wrap,.skin-wrap,.outfit-wrap{grid-template-columns:1fr}.feat-grid{grid-template-columns:1fr}.prod-grid{grid-template-columns:repeat(2,1fr)}.cats-grid{grid-template-columns:repeat(3,1fr)}.fgrid{grid-template-columns:1fr 1fr}.news-row{flex-direction:column}section{padding:60px 5%}.cart-sb{width:100%}.fbot{justify-content:center;text-align:center}.form-grid{grid-template-columns:1fr}.admin-stat-grid{grid-template-columns:1fr}.blog-grid{grid-template-columns:1fr;} .pd-right{padding:24px;} }
+@media(max-width:768px){.nav-links,.btn-nav{display:none}.hamburger{display:flex}.hero-content{grid-template-columns:1fr;text-align:center}.hero-visual{display:none}.hero-actions{justify-content:center}.hero-stats{justify-content:center}.chat-wrap,.skin-wrap,.outfit-wrap{grid-template-columns:1fr}.feat-grid{grid-template-columns:1fr}.prod-grid{grid-template-columns:repeat(2,1fr)}.cats-grid{grid-template-columns:repeat(3,1fr)}.fgrid{grid-template-columns:1fr 1fr}.news-row{flex-direction:column}section{padding:60px 5%}.form-grid{grid-template-columns:1fr}.admin-stat-grid{grid-template-columns:1fr}.blog-grid{grid-template-columns:1fr;} .pd-right{padding:24px;} }
 @media(max-width:480px){.prod-grid{grid-template-columns:1fr}.cats-grid{grid-template-columns:repeat(2,1fr)}.fgrid{grid-template-columns:1fr}.skin-opts, .oopts{grid-template-columns:1fr}.admin-wrap{width:100%} .admin-stat-grid{grid-template-columns:1fr}}
 </style>
 </head>
@@ -731,6 +700,18 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
   </div>
 </footer>
 
+<div class="mov" id="loginMov" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="login-modal">
+    <button class="mcl" onclick="document.getElementById('loginMov').classList.remove('open')">✕</button>
+    <h2>GlowVeda mein Sign In karo</h2>
+    <p>Apni wishlist save karo, orders track karo, aur exclusive offers pao!</p>
+    <button class="google-btn" onclick="doGoogleLogin()">
+      <svg class="google-icon" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      Google se Sign In karo
+    </button>
+  </div>
+</div>
+
 <div class="mov" id="mainMov" onclick="if(event.target===this)this.classList.remove('open')">
   <div class="modal">
     <button class="mcl" onclick="document.getElementById('mainMov').classList.remove('open')">✕</button>
@@ -927,6 +908,16 @@ const CFG = {
 
 try { emailjs.init(CFG.emailKey); } catch(e) {}
 
+// MISSING OBSERVER RESTORED
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting){ 
+      e.target.style.opacity = '1'; 
+      e.target.style.transform = 'translateY(0)'; 
+    }
+  });
+}, {threshold: .1});
+
 // DEFAULT FALLBACK ARRAYS
 const defProds = [
   {id:'p1',name:'Rose Glow Face Serum',    cat:'Skincare', gender:'Unisex', desc:'Vitamin C + Rose extract', benefits:'Glowing skin guaranteed, hydrates deeply.', price:599,  old:999,  emoji:'🌹',tag:'Bestseller',stars:'★★★★★',bg:'#fff0f4', link:'https://amzn.to/example', images:[]},
@@ -963,6 +954,9 @@ let currentFilterCat = null;
 
 // Initial render from local fast cache
 document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll('.feat-card, .cat-card, .pcard, .blog-card').forEach(el => {
+        el.style.opacity = '0'; el.style.transform = 'translateY(30px)'; el.style.transition = 'all .5s ease'; obs.observe(el);
+    });
     renderCats();
     renderProds(PRODS);
     renderBlogs();
@@ -1006,8 +1000,6 @@ async function loadFirestoreCats(){
       }
   }catch(e){}
 }
-
-// REST OF THE ADMIN AND UI LOGIC...
 
 function updateCategoryCounts() {
   CATS.forEach(c => { const el = document.getElementById('cnt'+c.name); if(el) el.textContent = PRODS.filter(p=>p.cat===c.name).length + ' Products'; });
@@ -1310,7 +1302,6 @@ window.doSubscribe = async function(){
   btn.disabled=false; btn.textContent='Subscribe Karo 💌';
 }
 
-function togWish(btn,name){btn.classList.toggle('on');btn.textContent=btn.classList.contains('on')?'❤️':'🤍';showT(btn.classList.contains('on')?`❤️ ${name} wishlist mein!`:`Wishlist se remove hua`,'💝');}
 function openLogin(){ document.getElementById('loginMov').classList.add('open'); }
 async function doGoogleLogin(){
   if(!window._fb) return;
@@ -1345,6 +1336,8 @@ window.fModal = fModal;
 window.filterProds = filterProds;
 window.openProduct = openProduct;
 window.openBlog = openBlog;
+window.openLogin = openLogin;
+window.doGoogleLogin = doGoogleLogin;
 </script>
 </body>
 </html>
