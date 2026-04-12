@@ -773,7 +773,7 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
           <h3 id="aAddTitle">Naya Affiliate Product Add Karo</h3>
           
           <div class="finp full" style="display:flex; gap:10px; background:var(--rose-pale); padding:15px; border-radius:12px; border:1.5px dashed var(--rose); margin-bottom:15px;">
-              <input type="text" id="aAutoLink" class="finp" style="flex:1; border:none;" placeholder="Amazon Product Link paste karein...">
+              <input type="text" id="aAutoLink" class="finp" style="flex:1; border:none;" placeholder="Amazon ka FULL Link paste karein (amzn.to nahi)...">
               <button class="fsave" style="width:auto; margin:0; padding:10px 20px; box-shadow:none;" onclick="autoFillProduct()" id="btnAutoFill">✨ Auto Fill</button>
           </div>
 
@@ -781,7 +781,7 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
             <input class="finp full" id="aName" placeholder="Product name *" type="text">
             <select class="finp" id="aCat">
               <option value="">Category chunein *</option>
-              </select>
+            </select>
             <select class="finp" id="aGender">
               <option value="Unisex">Unisex / All</option>
               <option value="Male">Men</option>
@@ -860,7 +860,7 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
         </div>
       </div>
 
-      <div class="admin-section" id="aCat">
+      <div class="admin-section" id="aCatSection">
         <div class="admin-form">
           <h3 id="cAddTitle">Category Add / Edit / Delete</h3>
           <p style="font-size:12px; color:var(--muted); margin-bottom:15px;">Nayi category banayein, ya purani ko edit/delete karein.</p>
@@ -872,7 +872,7 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
             
             <select class="finp full" id="cSelectName" onchange="loadCatForEdit(this.value)">
               <option value="">Select existing category...</option>
-              </select>
+            </select>
             
             <input class="finp full" id="cEmoji" placeholder="Icon Emoji (e.g. 🧴)" type="text">
             
@@ -918,9 +918,8 @@ const obs = new IntersectionObserver(entries => {
   });
 }, {threshold: .1});
 
-// DEFAULT FALLBACK ARRAYS
 const defProds = [
-  {id:'p1',name:'Rose Glow Face Serum',    cat:'Skincare', gender:'Unisex', desc:'Vitamin C + Rose extract', benefits:'Glowing skin guaranteed, hydrates deeply.', price:599,  old:999,  emoji:'🌹',tag:'Bestseller',stars:'★★★★★',bg:'#fff0f4', link:'https://amzn.to/example', images:[]},
+  {id:'p1',name:'Rose Glow Face Serum',    cat:'Skincare', gender:'Unisex', desc:'Vitamin C + Rose extract', benefits:'Glowing skin guaranteed, hydrates deeply.', price:599,  old:999,  emoji:'🌹',tag:'Bestseller',stars:'★★★★★',bg:'#fff0f4', link:'https://amzn.to/example', images:[]}
 ];
 
 const defBlogs = [
@@ -936,7 +935,6 @@ const defCats = [
   {id:'c6', name:'Accessories', icon:'💍', img:''}
 ];
 
-// CACHE OR DEFAULT
 let PRODS = JSON.parse(localStorage.getItem('gv_cache_prods')) || defProds;
 let BLOGS = JSON.parse(localStorage.getItem('gv_cache_blogs')) || defBlogs;
 let CATS = JSON.parse(localStorage.getItem('gv_cache_cats')) || defCats;
@@ -956,7 +954,6 @@ document.addEventListener("DOMContentLoaded", () => {
     renderBlogs();
 });
 
-// FIREBASE BACKGROUND FETCHERS
 async function loadFirestoreProducts(){
   if(!window._fb) return;
   try{ 
@@ -968,6 +965,7 @@ async function loadFirestoreProducts(){
       }
   }catch(e){}
 }
+
 async function loadFirestoreBlogs(){
   if(!window._fb) return;
   try{ 
@@ -979,6 +977,7 @@ async function loadFirestoreBlogs(){
       }
   }catch(e){}
 }
+
 async function loadFirestoreCats(){
   if(!window._fb) return;
   try{ 
@@ -1025,7 +1024,7 @@ function renderCats() {
     }).join('');
     document.querySelectorAll('.cat-card').forEach(el=>{el.style.opacity='0';el.style.transform='translateY(30px)';el.style.transition='all .5s ease';obs.observe(el);});
     updateCategoryCounts();
-    updateCategoryDropdowns(); // Also update dropdowns when categories render
+    updateCategoryDropdowns();
 }
 
 function renderProds(list){
@@ -1137,9 +1136,17 @@ function openBlog(id) {
 
 function openAdmin(){ document.getElementById('userMenu').classList.remove('show'); document.getElementById('adminPanel').classList.add('open'); renderAdminList(); renderAdminBlogList(); document.getElementById('aStatCat').textContent = CATS.length; }
 function closeAdmin(){ document.getElementById('adminPanel').classList.remove('open'); }
+
 function aTab(t){
-  document.querySelectorAll('.atab').forEach(b=>b.classList.remove('active')); document.querySelectorAll('.admin-section').forEach(s=>s.classList.remove('show')); event.target.classList.add('active');
-  if(t==='add') document.getElementById('aAdd').classList.add('show'); else if(t==='list') { document.getElementById('aList').classList.add('show'); renderAdminList(); } else if(t==='addBlog') document.getElementById('aAddBlog').classList.add('show'); else if(t==='listBlog') { document.getElementById('aListBlog').classList.add('show'); renderAdminBlogList(); } else if(t==='cat') document.getElementById('aCat').classList.add('show');
+  document.querySelectorAll('.atab').forEach(b=>b.classList.remove('active')); 
+  document.querySelectorAll('.admin-section').forEach(s=>s.classList.remove('show')); 
+  event.target.classList.add('active');
+  if(t==='add') document.getElementById('aAdd').classList.add('show'); 
+  else if(t==='list') { document.getElementById('aList').classList.add('show'); renderAdminList(); } 
+  else if(t==='addBlog') document.getElementById('aAddBlog').classList.add('show'); 
+  else if(t==='listBlog') { document.getElementById('aListBlog').classList.add('show'); renderAdminBlogList(); } 
+  // FIX APPLIED HERE
+  else if(t==='cat') document.getElementById('aCatSection').classList.add('show');
 }
 
 // ====================== MAGIC AUTO-FILL LOGIC ======================
@@ -1147,29 +1154,31 @@ async function autoFillProduct() {
     const link = document.getElementById('aAutoLink').value.trim();
     if(!link || !link.includes('http')) { showT('Sahi Amazon link dalein!', '⚠️'); return; }
 
+    // ALERT FOR SHORT LINKS
+    if(link.includes('amzn.to')) {
+        showT('Amazon ka FULL link use karein! (Jisme product ka naam ho). amzn.to block ho jata hai.', '⚠️');
+        return;
+    }
+
     const btn = document.getElementById('btnAutoFill');
     btn.disabled = true; btn.textContent = '⏳ Fetching...';
 
     try {
-        // Free proxy (AllOrigins) se HTML fetch karenge
         const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(link)}`);
         const data = await res.json();
         const parser = new DOMParser();
         const doc = parser.parseFromString(data.contents, "text/html");
 
-        // Amazon data extract karna
         let title = doc.querySelector('#productTitle')?.textContent.trim() || '';
         let priceRaw = doc.querySelector('.a-price-whole')?.textContent.trim() || '0';
         let price = priceRaw.replace(/[^0-9]/g, '');
         let img = doc.querySelector('#landingImage')?.src || doc.querySelector('#imgBlkFront')?.src || '';
 
-        // Agar proxy fail ho gaya, toh URL se naam nikalenge
         if(!title) {
             const urlParts = link.split('/');
             title = urlParts.find(p => p.length > 15 && !p.includes('amazon'))?.replace(/-/g, ' ') || "Trending Product";
         }
 
-        // Form mein basic details dalo
         document.getElementById('aName').value = title;
         if(price !== '0') {
             document.getElementById('aPrice').value = price;
@@ -1180,7 +1189,6 @@ async function autoFillProduct() {
 
         btn.textContent = '✨ AI Generating...';
 
-        // Aapki Llama API se AI Details Generate karwana
         const prompt = `Act as an e-commerce expert. I have a product titled: "${title}".
         Provide a JSON response with the following keys exactly:
         "category" (choose one: Skincare, Makeup, Haircare, Ethnic, Wellness, Accessories, or suggest new 1-word category),
@@ -1192,18 +1200,15 @@ async function autoFillProduct() {
         Return ONLY valid JSON. No markdown, no backticks.`;
 
         const aiResponseRaw = await callGemini(prompt);
-        // Clean JSON formatting from AI response
         const cleanJsonStr = aiResponseRaw.replace(/```json/gi, '').replace(/```/g, '').trim();
         const aiData = JSON.parse(cleanJsonStr);
 
-        // Nayi category mili toh dynamically add kardo
         const catDropdown = document.getElementById('aCat');
         let catExists = Array.from(catDropdown.options).some(opt => opt.value === aiData.category);
         if(!catExists && aiData.category) {
             catDropdown.add(new Option(aiData.category, aiData.category));
         }
 
-        // Form mein AI details dalo
         document.getElementById('aCat').value = aiData.category || '';
         document.getElementById('aGender').value = aiData.gender || 'Unisex';
         document.getElementById('aDesc').value = aiData.desc || '';
@@ -1214,13 +1219,11 @@ async function autoFillProduct() {
         showT('Auto Fill Done!', '✅');
 
     } catch(e) {
-        console.log(e);
         showT('Thoda manual enter karna padega. Name/Link set ho gaya hai.', '⚠️');
     }
 
     btn.disabled = false; btn.textContent = '✨ Auto Fill';
 }
-// ===================================================================
 
 function renderAdminList(){
   const el=document.getElementById('adminProdList'); if(!PRODS.length){ el.innerHTML='<div class="empty-msg">Koi product nahi.</div>'; return; }
@@ -1269,15 +1272,12 @@ async function saveProduct() {
         await window._fb.addDoc(window._fb.collection(window._fb.db,'products'), prodData);
       }
       
-      // Fast refresh
       await loadFirestoreProducts(); 
       resetProductForm();
       showT('Product Saved!','✅');
       aTab('list');
     }
-  } catch(e) {
-    showT('Error: ' + e.message, '❌');
-  }
+  } catch(e) { showT('Error: ' + e.message, '❌'); }
   btn.disabled=false; btn.textContent='✅ Save Product';
 }
 
@@ -1327,7 +1327,7 @@ function loadCatForEdit(name) {
     if(c) { 
         document.getElementById('cEmoji').value = c.icon || ''; 
         document.getElementById('cImg').value = c.img || ''; 
-        btnDel.style.display = 'block'; // Show delete button
+        btnDel.style.display = 'block'; 
     }
 }
 
@@ -1341,7 +1341,6 @@ function resetCatForm() {
 }
 
 async function saveCategory() {
-    // Priority to new name, otherwise selected name
     const newName = document.getElementById('cNewName').value.trim();
     const selectedName = document.getElementById('cSelectName').value;
     const name = newName || selectedName;
@@ -1359,11 +1358,7 @@ async function saveCategory() {
         const catData = { name: name, icon: document.getElementById('cEmoji').value || '✨', img: finalImg };
         const idx = CATS.findIndex(c => c.name === name); 
         
-        if(idx > -1) {
-            CATS[idx] = { ...CATS[idx], ...catData }; // Update
-        } else {
-            CATS.push({ id: name, ...catData }); // Add new
-        }
+        if(idx > -1) { CATS[idx] = { ...CATS[idx], ...catData }; } else { CATS.push({ id: name, ...catData }); }
 
         if(window._fb) { await window._fb.setDoc(window._fb.doc(window._fb.db, 'categories', name), catData, {merge:true}); }
         localStorage.setItem('gv_cache_cats', JSON.stringify(CATS));
@@ -1381,17 +1376,15 @@ async function deleteCategory() {
 
     try {
         CATS = CATS.filter(c => c.name !== name);
-        if(window._fb) {
-            await window._fb.deleteDoc(window._fb.doc(window._fb.db, 'categories', name));
-        }
+        if(window._fb) { await window._fb.deleteDoc(window._fb.doc(window._fb.db, 'categories', name)); }
         localStorage.setItem('gv_cache_cats', JSON.stringify(CATS));
         renderCats();
         showT(`Category Deleted`, '🗑️');
         resetCatForm();
     } catch(e) { showT('Error deleting', '❌'); }
 }
-// =========================================================================
 
+// ====================== AI TOOLS ======================
 function selGenSkin(el, g) { document.querySelectorAll('.g-skin').forEach(o => o.classList.remove('active')); el.classList.add('active'); skinGender = g; }
 function selSkin(el,t){document.querySelectorAll('.sopt').forEach(o=>o.classList.remove('active'));el.classList.add('active');sSkin=t;}
 function togConcern(el){el.classList.toggle('active');const c=el.textContent;el.classList.contains('active')?concerns.push(c):concerns=concerns.filter(x=>x!==c);}
