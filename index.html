@@ -334,20 +334,28 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
 .bbtn {padding:10px 20px; border-radius:50px; background:transparent; border:1.5px solid var(--rose); color:var(--rose); cursor:pointer; font-size:13px; font-weight:600; transition:all 0.2s; align-self:flex-start;}
 .bbtn:hover {background:var(--rose); color:#fff;}
 
-/* PRODUCT DETAILS MODAL */
-#prodMov .modal { padding:0; overflow:hidden; }
-.pd-wrap { display:flex; flex-wrap:wrap; height:100%; max-height:85vh;}
-.pd-left { flex:1; min-width:300px; background:var(--rose-pale); display:flex; flex-direction:column; align-items:center; padding:30px; position:relative;}
-.pd-main-img { width:100%; max-width:300px; height:300px; object-fit:contain; border-radius:12px; margin-bottom:15px; background:#fff; box-shadow:var(--sh);}
-.pd-thumbs { display:flex; gap:10px; overflow-x:auto; max-width:100%; padding-bottom:5px; }
-.pd-thumb { width:50px; height:50px; border-radius:8px; cursor:pointer; border:2px solid transparent; object-fit:cover; background:#fff; }
-.pd-thumb:hover, .pd-thumb.active { border-color:var(--rose); }
-.pd-right { flex:1; min-width:300px; padding:36px; display:flex; flex-direction:column; overflow-y:auto; max-height:85vh; }
+/* PRODUCT DETAILS MODAL - RESPONSIVE FIX */
+#prodMov { padding: 15px; }
+#prodMov .modal { padding: 0; overflow: hidden; display: flex; flex-direction: row; max-height: 90vh; border-radius: 24px; max-width: 950px; }
 
+.pd-left { width: 45%; background: var(--rose-pale); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; position: relative; }
+.pd-main-img { width: 100%; max-width: 320px; height: 320px; object-fit: contain; border-radius: 16px; margin-bottom: 20px; background: #fff; box-shadow: var(--sh-lg); padding: 15px; }
+.pd-thumbs { display: flex; gap: 10px; overflow-x: auto; max-width: 100%; padding-bottom: 8px; }
+.pd-thumb { width: 55px; height: 55px; border-radius: 10px; cursor: pointer; border: 2px solid transparent; object-fit: cover; background: #fff; flex-shrink: 0; transition: all 0.2s; }
+.pd-thumb:hover, .pd-thumb.active { border-color: var(--rose); transform: scale(1.05); }
+
+.pd-right { width: 55%; padding: 45px; display: flex; flex-direction: column; overflow-y: auto; }
 /* RESPONSIVE */
-@media(max-width:1024px){.feat-grid{grid-template-columns:repeat(2,1fr)}.prod-grid{grid-template-columns:repeat(2,1fr)}.cats-grid{grid-template-columns:repeat(3,1fr)}.fgrid{grid-template-columns:1fr 1fr}.blog-grid{grid-template-columns:repeat(2, 1fr);}}
-@media(max-width:768px){.nav-links,.btn-nav{display:none}.hamburger{display:flex}.hero-content{grid-template-columns:1fr;text-align:center}.hero-visual{display:none}.hero-actions{justify-content:center}.hero-stats{justify-content:center}.chat-wrap,.skin-wrap,.outfit-wrap{grid-template-columns:1fr}.feat-grid{grid-template-columns:1fr}.prod-grid{grid-template-columns:repeat(2,1fr)}.cats-grid{grid-template-columns:repeat(3,1fr)}.fgrid{grid-template-columns:1fr 1fr}.news-row{flex-direction:column}section{padding:60px 5%}.form-grid{grid-template-columns:1fr}.admin-stat-grid{grid-template-columns:1fr}.blog-grid{grid-template-columns:1fr;} .pd-right{padding:24px;} }
-@media(max-width:480px){.prod-grid{grid-template-columns:1fr}.cats-grid{grid-template-columns:repeat(2,1fr)}.fgrid{grid-template-columns:1fr}.skin-opts, .oopts{grid-template-columns:1fr}.admin-wrap{width:100%} .admin-stat-grid{grid-template-columns:1fr}}
+@media(max-width:768px) {
+    /* ... aapka baaki ka mobile CSS ... */
+    
+    /* Modal ko mobile par Vertical (Upar-Neeche) dikhane ke liye */
+    #prodMov .modal { flex-direction: column; overflow-y: auto; height: auto; max-height: 85vh; }
+    .pd-left { width: 100%; padding: 40px 20px 20px; border-radius: 24px 24px 0 0; }
+    .pd-main-img { height: 250px; max-width: 250px; }
+    .pd-right { width: 100%; padding: 24px; overflow-y: visible; }
+    .mcl { top: 12px; right: 12px; background: #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); z-index: 50; }
+}
 </style>
 </head>
 <body>
