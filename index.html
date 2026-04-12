@@ -771,17 +771,17 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
       <div class="admin-section show" id="aAdd">
         <div class="admin-form">
           <h3 id="aAddTitle">Naya Affiliate Product Add Karo</h3>
+          
+          <div class="finp full" style="display:flex; gap:10px; background:var(--rose-pale); padding:15px; border-radius:12px; border:1.5px dashed var(--rose); margin-bottom:15px;">
+              <input type="text" id="aAutoLink" class="finp" style="flex:1; border:none;" placeholder="Amazon Product Link paste karein...">
+              <button class="fsave" style="width:auto; margin:0; padding:10px 20px; box-shadow:none;" onclick="autoFillProduct()" id="btnAutoFill">✨ Auto Fill</button>
+          </div>
+
           <div class="form-grid">
             <input class="finp full" id="aName" placeholder="Product name *" type="text">
             <select class="finp" id="aCat">
               <option value="">Category chunein *</option>
-              <option value="Skincare">Skincare</option>
-              <option value="Makeup">Makeup</option>
-              <option value="Haircare">Haircare</option>
-              <option value="Ethnic">Ethnic Wear</option>
-              <option value="Wellness">Wellness</option>
-              <option value="Accessories">Accessories</option>
-            </select>
+              </select>
             <select class="finp" id="aGender">
               <option value="Unisex">Unisex / All</option>
               <option value="Male">Men</option>
@@ -791,7 +791,7 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
             <input class="finp" id="aOld" placeholder="Original price (₹)" type="number">
             
             <div class="finp full" style="padding:10px; border:1px dashed var(--rose); background:#fff;">
-                <label style="font-size:12px; display:block; margin-bottom:5px;">Product Photos (Multiple select kar sakte ho) Ya URLs dalein:</label>
+                <label style="font-size:12px; display:block; margin-bottom:5px;">Product Photos (Multiple select) Ya URLs dalein:</label>
                 <input type="file" id="aFile" accept="image/*" multiple style="margin-bottom:8px; display:block;">
                 <input class="finp" id="aImg" placeholder="Image URLs (Comma se alag karein agar link daal rahe ho)" type="text" style="width:100%;">
             </div>
@@ -862,20 +862,19 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
 
       <div class="admin-section" id="aCat">
         <div class="admin-form">
-          <h3 id="cAddTitle">Category Icon/Image Update Karo</h3>
-          <p style="font-size:12px; color:var(--muted); margin-bottom:15px;">Website ke homepage categories me Image ya naya emoji set karein.</p>
+          <h3 id="cAddTitle">Category Add / Edit / Delete</h3>
+          <p style="font-size:12px; color:var(--muted); margin-bottom:15px;">Nayi category banayein, ya purani ko edit/delete karein.</p>
           <div class="form-grid">
-            <select class="finp full" id="cSelectName" onchange="loadCatForEdit(this.value)">
-              <option value="">Category select karein...</option>
-              <option value="Skincare">Skincare</option>
-              <option value="Makeup">Makeup</option>
-              <option value="Haircare">Haircare</option>
-              <option value="Ethnic">Ethnic Wear</option>
-              <option value="Wellness">Wellness</option>
-              <option value="Accessories">Accessories</option>
-            </select>
             
-            <input class="finp" id="cEmoji" placeholder="Icon Emoji (e.g. 🧴)" type="text">
+            <input class="finp full" id="cNewName" placeholder="Nayi Category ka naam likhein (e.g. Perfumes) *">
+            
+            <div style="grid-column:1/-1; text-align:center; font-size:12px; color:var(--muted); margin: 8px 0;">--- YA PURANI EDIT/DELETE KAREIN ---</div>
+            
+            <select class="finp full" id="cSelectName" onchange="loadCatForEdit(this.value)">
+              <option value="">Select existing category...</option>
+              </select>
+            
+            <input class="finp full" id="cEmoji" placeholder="Icon Emoji (e.g. 🧴)" type="text">
             
             <div class="finp full" style="padding:10px; border:1px dashed var(--rose); background:#fff;">
                 <label style="font-size:12px; display:block; margin-bottom:5px;">Category Photo Upload (Optional):</label>
@@ -884,7 +883,8 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
             </div>
           </div>
           <div style="display:flex; gap:10px; margin-top:10px;">
-             <button class="fsave" id="cSaveBtn" onclick="saveCategory()">✅ Update Category</button>
+             <button class="fsave" id="cSaveBtn" onclick="saveCategory()">✅ Save Category</button>
+             <button class="fsave" id="cDelBtn" onclick="deleteCategory()" style="background:#ef4444; color:#fff; border:none; display:none;">🗑️ Delete</button>
              <button class="fsave" onclick="resetCatForm()" style="background:#fff; color:var(--dark); border:1px solid #ccc; box-shadow:none;">Cancel</button>
           </div>
         </div>
@@ -909,7 +909,6 @@ const CFG = {
 
 try { emailjs.init(CFG.emailKey); } catch(e) {}
 
-// MISSING OBSERVER RESTORED
 const obs = new IntersectionObserver(entries => {
   entries.forEach(e => {
     if(e.isIntersecting){ 
@@ -922,15 +921,10 @@ const obs = new IntersectionObserver(entries => {
 // DEFAULT FALLBACK ARRAYS
 const defProds = [
   {id:'p1',name:'Rose Glow Face Serum',    cat:'Skincare', gender:'Unisex', desc:'Vitamin C + Rose extract', benefits:'Glowing skin guaranteed, hydrates deeply.', price:599,  old:999,  emoji:'🌹',tag:'Bestseller',stars:'★★★★★',bg:'#fff0f4', link:'https://amzn.to/example', images:[]},
-  {id:'p2',name:'Kajal Ultra Black',       cat:'Makeup',   gender:'Female', desc:'Long-lasting waterproof kajal.', benefits:'Smudge-proof, lasts 24 hours.',     price:199,  old:299,  emoji:'👁️',tag:'Hot',        stars:'★★★★★',bg:'#f0f0f4', link:'https://amzn.to/example', images:[]},
-  {id:'p3',name:'Mens Styling Hair Gel',   cat:'Haircare', gender:'Male',   desc:'Strong hold matte finish.', benefits:'Keeps hair set for 12 hours.', price:349,  old:499,  emoji:'💆‍♂️',tag:'Men', stars:'★★★★☆',bg:'#fff8f0', link:'https://amzn.to/example', images:[]},
-  {id:'p4',name:'Banarasi Silk Saree',     cat:'Ethnic',   gender:'Female', desc:'Pure silk, handwoven saree.', benefits:'Perfect for weddings and occasions.', price:2499, old:3999, emoji:'👗',tag:'Premium',   stars:'★★★★★',bg:'#f4f0ff', link:'https://amzn.to/example', images:[]},
 ];
 
 const defBlogs = [
-  {id:'b1', tag:'Fashion', title:'5 Gen-Z Summer Outfits Jo India Mein Trend Kar Rahe Hain', desc:'Baggy jeans se lekar corset tops tak, summer 2026 ke sabse stylish aur comfortable outfits ke baare mein jaante hain.', content:'Content coming soon...', imgEmoji:'👗'},
-  {id:'b2', tag:'Skincare', title:'Glass Skin Pane Ka 5-Step Korean Routine (Indian Skin Ke Liye)', desc:'Korean beauty ka raaz ab India mein. Kaise payein wahi glowing radiant glass skin generic products use karke.', content:'Content coming soon...', imgEmoji:'✨'},
-  {id:'b3', tag:'Grooming', title:'Men\'s Grooming Essentials: 3 Cheezein Jo Har Indian Ladke Ke Pass honi Chahiye', desc:'Basic skin care aur hair styling tips jo apko instantly zyada sharp aur confident dikhayengi.', content:'Content coming soon...', imgEmoji:'🧔'}
+  {id:'b1', tag:'Skincare', title:'Glass Skin Pane Ka 5-Step Korean Routine', desc:'Korean beauty ka raaz ab India mein.', content:'...', imgEmoji:'✨'}
 ];
 
 const defCats = [
@@ -953,7 +947,6 @@ let sSkin='', concerns=[], sOcc='', sSeason='';
 let skinGender = 'Female', outfitGender = 'Female';
 let currentFilterCat = null;
 
-// Initial render from local fast cache
 document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll('.feat-card, .cat-card, .pcard, .blog-card').forEach(el => {
         el.style.opacity = '0'; el.style.transform = 'translateY(30px)'; el.style.transition = 'all .5s ease'; obs.observe(el);
@@ -1002,6 +995,21 @@ async function loadFirestoreCats(){
   }catch(e){}
 }
 
+function updateCategoryDropdowns() {
+    const prodCatSelect = document.getElementById('aCat');
+    const editCatSelect = document.getElementById('cSelectName');
+    let opts = '<option value="">Category chunein *</option>';
+    let editOpts = '<option value="">Select existing category...</option>';
+
+    CATS.forEach(c => {
+        opts += `<option value="${c.name}">${c.name}</option>`;
+        editOpts += `<option value="${c.name}">${c.name}</option>`;
+    });
+
+    if(prodCatSelect) prodCatSelect.innerHTML = opts;
+    if(editCatSelect) editCatSelect.innerHTML = editOpts;
+}
+
 function updateCategoryCounts() {
   CATS.forEach(c => { const el = document.getElementById('cnt'+c.name); if(el) el.textContent = PRODS.filter(p=>p.cat===c.name).length + ' Products'; });
   document.getElementById('heroProdCount').textContent = PRODS.length + "+";
@@ -1017,6 +1025,7 @@ function renderCats() {
     }).join('');
     document.querySelectorAll('.cat-card').forEach(el=>{el.style.opacity='0';el.style.transform='translateY(30px)';el.style.transition='all .5s ease';obs.observe(el);});
     updateCategoryCounts();
+    updateCategoryDropdowns(); // Also update dropdowns when categories render
 }
 
 function renderProds(list){
@@ -1133,6 +1142,86 @@ function aTab(t){
   if(t==='add') document.getElementById('aAdd').classList.add('show'); else if(t==='list') { document.getElementById('aList').classList.add('show'); renderAdminList(); } else if(t==='addBlog') document.getElementById('aAddBlog').classList.add('show'); else if(t==='listBlog') { document.getElementById('aListBlog').classList.add('show'); renderAdminBlogList(); } else if(t==='cat') document.getElementById('aCat').classList.add('show');
 }
 
+// ====================== MAGIC AUTO-FILL LOGIC ======================
+async function autoFillProduct() {
+    const link = document.getElementById('aAutoLink').value.trim();
+    if(!link || !link.includes('http')) { showT('Sahi Amazon link dalein!', '⚠️'); return; }
+
+    const btn = document.getElementById('btnAutoFill');
+    btn.disabled = true; btn.textContent = '⏳ Fetching...';
+
+    try {
+        // Free proxy (AllOrigins) se HTML fetch karenge
+        const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(link)}`);
+        const data = await res.json();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(data.contents, "text/html");
+
+        // Amazon data extract karna
+        let title = doc.querySelector('#productTitle')?.textContent.trim() || '';
+        let priceRaw = doc.querySelector('.a-price-whole')?.textContent.trim() || '0';
+        let price = priceRaw.replace(/[^0-9]/g, '');
+        let img = doc.querySelector('#landingImage')?.src || doc.querySelector('#imgBlkFront')?.src || '';
+
+        // Agar proxy fail ho gaya, toh URL se naam nikalenge
+        if(!title) {
+            const urlParts = link.split('/');
+            title = urlParts.find(p => p.length > 15 && !p.includes('amazon'))?.replace(/-/g, ' ') || "Trending Product";
+        }
+
+        // Form mein basic details dalo
+        document.getElementById('aName').value = title;
+        if(price !== '0') {
+            document.getElementById('aPrice').value = price;
+            document.getElementById('aOld').value = Math.floor(Number(price) * 1.4); 
+        }
+        document.getElementById('aLink').value = link;
+        if(img) document.getElementById('aImg').value = img;
+
+        btn.textContent = '✨ AI Generating...';
+
+        // Aapki Llama API se AI Details Generate karwana
+        const prompt = `Act as an e-commerce expert. I have a product titled: "${title}".
+        Provide a JSON response with the following keys exactly:
+        "category" (choose one: Skincare, Makeup, Haircare, Ethnic, Wellness, Accessories, or suggest new 1-word category),
+        "gender" (Male, Female, or Unisex),
+        "desc" (2 sentence catchy Hindi Romanized description),
+        "benefits" (1 sentence short benefit in Hindi Romanized),
+        "emoji" (1 relevant emoji),
+        "tag" (1 short word like Bestseller, Viral, Premium).
+        Return ONLY valid JSON. No markdown, no backticks.`;
+
+        const aiResponseRaw = await callGemini(prompt);
+        // Clean JSON formatting from AI response
+        const cleanJsonStr = aiResponseRaw.replace(/```json/gi, '').replace(/```/g, '').trim();
+        const aiData = JSON.parse(cleanJsonStr);
+
+        // Nayi category mili toh dynamically add kardo
+        const catDropdown = document.getElementById('aCat');
+        let catExists = Array.from(catDropdown.options).some(opt => opt.value === aiData.category);
+        if(!catExists && aiData.category) {
+            catDropdown.add(new Option(aiData.category, aiData.category));
+        }
+
+        // Form mein AI details dalo
+        document.getElementById('aCat').value = aiData.category || '';
+        document.getElementById('aGender').value = aiData.gender || 'Unisex';
+        document.getElementById('aDesc').value = aiData.desc || '';
+        document.getElementById('aBenefits').value = aiData.benefits || '';
+        document.getElementById('aEmoji').value = aiData.emoji || '✨';
+        document.getElementById('aTag').value = aiData.tag || 'New';
+
+        showT('Auto Fill Done!', '✅');
+
+    } catch(e) {
+        console.log(e);
+        showT('Thoda manual enter karna padega. Name/Link set ho gaya hai.', '⚠️');
+    }
+
+    btn.disabled = false; btn.textContent = '✨ Auto Fill';
+}
+// ===================================================================
+
 function renderAdminList(){
   const el=document.getElementById('adminProdList'); if(!PRODS.length){ el.innerHTML='<div class="empty-msg">Koi product nahi.</div>'; return; }
   el.innerHTML=PRODS.map(p=> {
@@ -1145,7 +1234,7 @@ function editProduct(id) {
     document.getElementById('aName').value = p.name; document.getElementById('aCat').value = p.cat; document.getElementById('aGender').value = p.gender || 'Unisex'; document.getElementById('aPrice').value = p.price; document.getElementById('aOld').value = p.old || ''; document.getElementById('aEmoji').value = p.emoji || ''; document.getElementById('aImg').value = (p.images && p.images.length>0) ? p.images.join(', ') : (p.img || ''); document.getElementById('aLink').value = p.link || ''; document.getElementById('aDesc').value = p.desc || ''; document.getElementById('aBenefits').value = p.benefits || ''; document.getElementById('aTag').value = p.tag || ''; document.getElementById('aBg').value = p.bg || ''; document.getElementById('aStars').value = p.stars || '★★★★★';
     aTab('add');
 }
-function resetProductForm() { editingProductId = null; document.getElementById('aAddTitle').textContent = "Naya Affiliate Product Add Karo"; document.getElementById('aSaveBtn').innerHTML = "✅ Product Save Karo"; ['aName','aDesc','aBenefits','aPrice','aOld','aEmoji','aImg','aLink','aTag','aBg'].forEach(id=>document.getElementById(id).value=''); document.getElementById('aFile').value = ''; }
+function resetProductForm() { editingProductId = null; document.getElementById('aAddTitle').textContent = "Naya Affiliate Product Add Karo"; document.getElementById('aSaveBtn').innerHTML = "✅ Product Save Karo"; ['aName','aDesc','aBenefits','aPrice','aOld','aEmoji','aImg','aLink','aTag','aBg','aAutoLink'].forEach(id=>document.getElementById(id).value=''); document.getElementById('aFile').value = ''; }
 
 async function saveProduct() {
   const name=document.getElementById('aName').value.trim(), 
@@ -1159,7 +1248,6 @@ async function saveProduct() {
   btn.disabled=true; btn.textContent='Saving...';
 
   try {
-    // Sirf URL use kar rahe ho toh direct data prepare karo
     const imgUrl = document.getElementById('aImg').value.trim();
     const prodData = { 
         name, cat, price: Number(price), 
@@ -1180,7 +1268,8 @@ async function saveProduct() {
       } else {
         await window._fb.addDoc(window._fb.collection(window._fb.db,'products'), prodData);
       }
-      // Data save hone ke baad turant list refresh karo
+      
+      // Fast refresh
       await loadFirestoreProducts(); 
       resetProductForm();
       showT('Product Saved!','✅');
@@ -1191,7 +1280,14 @@ async function saveProduct() {
   }
   btn.disabled=false; btn.textContent='✅ Save Product';
 }
-async function delProduct(id){ if(!confirm('Delete karna hai?')) return; try{ if(window._fb && !id.startsWith('local_')){ await window._fb.deleteDoc(window._fb.doc(window._fb.db,'products',id)); } PRODS = PRODS.filter(p=>p.id!==id); localStorage.setItem('gv_cache_prods', JSON.stringify(PRODS)); renderProds(PRODS); renderAdminList(); showT('Deleted','🗑️'); }catch(e){} }
+
+async function delProduct(id){ 
+  if(!confirm('Delete karna hai?')) return; 
+  try{ 
+    PRODS = PRODS.filter(p=>p.id!==id); localStorage.setItem('gv_cache_prods', JSON.stringify(PRODS)); renderProds(PRODS); renderAdminList(); showT('Deleted','🗑️');
+    if(window._fb && !id.startsWith('local_')){ await window._fb.deleteDoc(window._fb.doc(window._fb.db,'products',id)); } 
+  }catch(e){} 
+}
 
 function renderAdminBlogList(){
   const el=document.getElementById('adminBlogList'); if(!BLOGS.length){ el.innerHTML='<div class="empty-msg">Koi blog nahi.</div>'; return; }
@@ -1221,26 +1317,80 @@ async function saveBlog(){
 }
 async function delBlog(id){ if(!confirm('Delete karna hai?')) return; try{ if(window._fb && !id.startsWith('local_')){ await window._fb.deleteDoc(window._fb.doc(window._fb.db,'blogs',id)); } BLOGS = BLOGS.filter(b=>b.id!==id); localStorage.setItem('gv_cache_blogs', JSON.stringify(BLOGS)); renderBlogs(); renderAdminBlogList(); showT('Deleted','🗑️'); }catch(e){} }
 
+// ====================== DYNAMIC CATEGORY ADD/REMOVE ======================
 function loadCatForEdit(name) {
+    const btnDel = document.getElementById('cDelBtn');
+    document.getElementById('cNewName').value = '';
     if(!name) { resetCatForm(); return; }
+    
     const c = CATS.find(x => x.name === name);
-    if(c) { document.getElementById('cEmoji').value = c.icon || ''; document.getElementById('cImg').value = c.img || ''; }
+    if(c) { 
+        document.getElementById('cEmoji').value = c.icon || ''; 
+        document.getElementById('cImg').value = c.img || ''; 
+        btnDel.style.display = 'block'; // Show delete button
+    }
 }
-function resetCatForm() { document.getElementById('cSelectName').value = ''; document.getElementById('cEmoji').value = ''; document.getElementById('cImg').value = ''; document.getElementById('cFile').value = ''; }
+
+function resetCatForm() { 
+    document.getElementById('cNewName').value = '';
+    document.getElementById('cSelectName').value = ''; 
+    document.getElementById('cEmoji').value = ''; 
+    document.getElementById('cImg').value = ''; 
+    document.getElementById('cFile').value = ''; 
+    document.getElementById('cDelBtn').style.display = 'none';
+}
+
 async function saveCategory() {
-    const name = document.getElementById('cSelectName').value; if(!name) return showT("Category select karein!", '⚠️');
-    const btn = document.getElementById('cSaveBtn'); btn.disabled=true; btn.textContent='Updating...';
+    // Priority to new name, otherwise selected name
+    const newName = document.getElementById('cNewName').value.trim();
+    const selectedName = document.getElementById('cSelectName').value;
+    const name = newName || selectedName;
+
+    if(!name) return showT("Category ka naam likhein ya select karein!", '⚠️');
+    
+    const btn = document.getElementById('cSaveBtn'); btn.disabled=true; btn.textContent='Saving...';
     try {
         let finalImg = document.getElementById('cImg').value.trim(); const fileInput = document.getElementById('cFile');
-        if(fileInput && fileInput.files[0] && window._fb && window._fb.storage) { const sRef = window._fb.ref(window._fb.storage, 'categories/' + Date.now() + "_" + fileInput.files[0].name); await window._fb.uploadBytes(sRef, fileInput.files[0]); finalImg = await window._fb.getDownloadURL(sRef); }
+        if(fileInput && fileInput.files[0] && window._fb && window._fb.storage) { 
+            const sRef = window._fb.ref(window._fb.storage, 'categories/' + Date.now() + "_" + fileInput.files[0].name); 
+            await window._fb.uploadBytes(sRef, fileInput.files[0]); finalImg = await window._fb.getDownloadURL(sRef); 
+        }
+        
         const catData = { name: name, icon: document.getElementById('cEmoji').value || '✨', img: finalImg };
-        const idx = CATS.findIndex(c => c.name === name); if(idx > -1) CATS[idx] = { ...CATS[idx], ...catData };
+        const idx = CATS.findIndex(c => c.name === name); 
+        
+        if(idx > -1) {
+            CATS[idx] = { ...CATS[idx], ...catData }; // Update
+        } else {
+            CATS.push({ id: name, ...catData }); // Add new
+        }
+
         if(window._fb) { await window._fb.setDoc(window._fb.doc(window._fb.db, 'categories', name), catData, {merge:true}); }
         localStorage.setItem('gv_cache_cats', JSON.stringify(CATS));
-        renderCats(); showT(`✅ Category Updated!`,'🎉'); resetCatForm();
+        renderCats(); 
+        showT(`✅ Category Saved!`,'🎉'); 
+        resetCatForm();
     } catch(e) { showT('Error updating', '❌'); }
-    btn.disabled=false; btn.innerHTML='✅ Update Category';
+    btn.disabled=false; btn.innerHTML='✅ Save Category';
 }
+
+async function deleteCategory() {
+    const name = document.getElementById('cSelectName').value;
+    if(!name) return;
+    if(!confirm(`${name} category delete karna chahte hain?`)) return;
+
+    try {
+        CATS = CATS.filter(c => c.name !== name);
+        if(window._fb) {
+            await window._fb.deleteDoc(window._fb.doc(window._fb.db, 'categories', name));
+        }
+        localStorage.setItem('gv_cache_cats', JSON.stringify(CATS));
+        renderCats();
+        showT(`Category Deleted`, '🗑️');
+        resetCatForm();
+    } catch(e) { showT('Error deleting', '❌'); }
+}
+// =========================================================================
 
 function selGenSkin(el, g) { document.querySelectorAll('.g-skin').forEach(o => o.classList.remove('active')); el.classList.add('active'); skinGender = g; }
 function selSkin(el,t){document.querySelectorAll('.sopt').forEach(o=>o.classList.remove('active'));el.classList.add('active');sSkin=t;}
