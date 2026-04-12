@@ -1147,29 +1147,49 @@ function editProduct(id) {
 }
 function resetProductForm() { editingProductId = null; document.getElementById('aAddTitle').textContent = "Naya Affiliate Product Add Karo"; document.getElementById('aSaveBtn').innerHTML = "✅ Product Save Karo"; ['aName','aDesc','aBenefits','aPrice','aOld','aEmoji','aImg','aLink','aTag','aBg'].forEach(id=>document.getElementById(id).value=''); document.getElementById('aFile').value = ''; }
 
-async function saveProduct(){
-  const name=document.getElementById('aName').value.trim(), cat=document.getElementById('aCat').value, gender=document.getElementById('aGender').value, price=document.getElementById('aPrice').value, desc=document.getElementById('aDesc').value.trim(), benefits=document.getElementById('aBenefits').value.trim(), fileInput = document.getElementById('aFile');
-  if(!name||!cat||!price||!desc){ showT('Details bhariye!','⚠️'); return; }
-  const btn=document.getElementById('aSaveBtn'); btn.disabled=true; btn.textContent='Saving...';
+async function saveProduct() {
+  const name=document.getElementById('aName').value.trim(), 
+        cat=document.getElementById('aCat').value, 
+        price=document.getElementById('aPrice').value, 
+        desc=document.getElementById('aDesc').value.trim();
+  
+  if(!name || !cat || !price || !desc) { showT('Zaroori details bhariye!','⚠️'); return; }
+  
+  const btn=document.getElementById('aSaveBtn');
+  btn.disabled=true; btn.textContent='Saving...';
+
   try {
-    let uploadedUrls = [];
-    if(fileInput && fileInput.files.length > 0 && window._fb && window._fb.storage) {
-        for(let i=0; i<fileInput.files.length; i++){
-            const f = fileInput.files[i]; const sRef = window._fb.ref(window._fb.storage, 'products/' + Date.now() + "_" + f.name); await window._fb.uploadBytes(sRef, f);
-            uploadedUrls.push(await window._fb.getDownloadURL(sRef));
-        }
+    // Sirf URL use kar rahe ho toh direct data prepare karo
+    const imgUrl = document.getElementById('aImg').value.trim();
+    const prodData = { 
+        name, cat, price: Number(price), 
+        old: Number(document.getElementById('aOld').value) || Number(price),
+        img: imgUrl, 
+        images: [imgUrl], 
+        link: document.getElementById('aLink').value.trim(),
+        desc, benefits: document.getElementById('aBenefits').value.trim(),
+        gender: document.getElementById('aGender').value || 'Unisex',
+        stars: document.getElementById('aStars').value || '★★★★★',
+        bg: document.getElementById('aBg').value || '#fff0f4',
+        tag: document.getElementById('aTag').value || 'New'
+    };
+
+    if(window._fb) {
+      if(editingProductId) {
+        await window._fb.updateDoc(window._fb.doc(window._fb.db,'products',editingProductId), prodData);
+      } else {
+        await window._fb.addDoc(window._fb.collection(window._fb.db,'products'), prodData);
+      }
+      // Data save hone ke baad turant list refresh karo
+      await loadFirestoreProducts(); 
+      resetProductForm();
+      showT('Product Saved!','✅');
+      aTab('list');
     }
-    let textUrls = document.getElementById('aImg').value.split(',').map(u=>u.trim()).filter(u=>u); let finalImages = [...uploadedUrls, ...textUrls];
-    if (finalImages.length === 0 && editingProductId) { const oldP = PRODS.find(p=>p.id===editingProductId); finalImages = oldP.images && oldP.images.length > 0 ? oldP.images : (oldP.img ? [oldP.img] : []); }
-    const prodData = { name, cat, gender, price:Number(price), old: Number(document.getElementById('aOld').value)||Number(price), emoji: document.getElementById('aEmoji').value||'🌸', img: finalImages.length > 0 ? finalImages[0] : '', images: finalImages, link: document.getElementById('aLink').value.trim(), tag: document.getElementById('aTag').value||'New', desc, benefits, bg: document.getElementById('aBg').value||'#fff0f4', stars: document.getElementById('aStars').value||'★★★★★' };
-    if(window._fb){
-        if(editingProductId) { await window._fb.updateDoc(window._fb.doc(window._fb.db,'products',editingProductId), prodData); prodData.id = editingProductId; const idx = PRODS.findIndex(p=>p.id===editingProductId); if(idx>-1) PRODS[idx] = prodData; } 
-        else { prodData.createdAt = new Date().toISOString(); const docRef = await window._fb.addDoc(window._fb.collection(window._fb.db,'products'), prodData); prodData.id = docRef.id; PRODS.unshift(prodData); }
-    } else { if(!editingProductId) { prodData.id = 'local_'+Date.now(); PRODS.unshift(prodData); } else { const idx = PRODS.findIndex(p=>p.id===editingProductId); if(idx>-1) PRODS[idx] = {...PRODS[idx], ...prodData}; } }
-    localStorage.setItem('gv_cache_prods', JSON.stringify(PRODS));
-    renderProds(PRODS); resetProductForm(); showT(`✅ Product Saved!`,'🎉'); aTab('list');
-  }catch(e){ showT('Error: '+e.message,'❌'); }
-  btn.disabled=false; btn.innerHTML='✅ Save Product';
+  } catch(e) {
+    showT('Error: ' + e.message, '❌');
+  }
+  btn.disabled=false; btn.textContent='✅ Save Product';
 }
 async function delProduct(id){ if(!confirm('Delete karna hai?')) return; try{ if(window._fb && !id.startsWith('local_')){ await window._fb.deleteDoc(window._fb.doc(window._fb.db,'products',id)); } PRODS = PRODS.filter(p=>p.id!==id); localStorage.setItem('gv_cache_prods', JSON.stringify(PRODS)); renderProds(PRODS); renderAdminList(); showT('Deleted','🗑️'); }catch(e){} }
 
