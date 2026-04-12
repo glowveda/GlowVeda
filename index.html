@@ -1150,81 +1150,119 @@ function aTab(t){
 }
 
 // ====================== MAGIC AUTO-FILL LOGIC ======================
+// ====================== ASLI AMAZON AUTO-FILL LOGIC ======================
 async function autoFillProduct() {
     const link = document.getElementById('aAutoLink').value.trim();
     if(!link || !link.includes('http')) { showT('Sahi Amazon link dalein!', '⚠️'); return; }
 
     // ALERT FOR SHORT LINKS
     if(link.includes('amzn.to')) {
-        showT('Amazon ka FULL link use karein! (Jisme product ka naam ho). amzn.to block ho jata hai.', '⚠️');
+        showT('Bhai, amzn.to link kaam nahi karega! Browser se FULL link copy karke daalo.', '⚠️');
         return;
     }
 
     const btn = document.getElementById('btnAutoFill');
-    btn.disabled = true; btn.textContent = '⏳ Fetching...';
+    btn.disabled = true; btn.textContent = '⏳ Fetching Amazon Data...';
 
     try {
+        // 1. Amazon ka HTML Fetch karna
         const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(link)}`);
         const data = await res.json();
         const parser = new DOMParser();
         const doc = parser.parseFromString(data.contents, "text/html");
 
+        // 2. ASLI TITLE nikalna
         let title = doc.querySelector('#productTitle')?.textContent.trim() || '';
-        let priceRaw = doc.querySelector('.a-price-whole')?.textContent.trim() || '0';
-        let price = priceRaw.replace(/[^0-9]/g, '');
-        let img = doc.querySelector('#landingImage')?.src || doc.querySelector('#imgBlkFront')?.src || '';
 
+        // 3. ASLI PRICE nikalna (Multiple tareeke)
+        let priceEl = doc.querySelector('.a-price-whole') || doc.querySelector('#priceblock_ourprice') || doc.querySelector('.a-color-price');
+        let priceRaw = priceEl ? priceEl.textContent.trim() : '0';
+        let price = priceRaw.replace(/[^0-9]/g, '');
+
+        // 4. ASLI IMAGE nikalna (High Quality)
+        let imgEl = doc.querySelector('#landingImage') || doc.querySelector('#imgBlkFront') || doc.querySelector('#main-image');
+        let img = '';
+        if(imgEl) {
+            // Amazon high-res image 'data-old-hires' me rakhta hai
+            img = imgEl.getAttribute('data-old-hires') || imgEl.src;
+        }
+
+        // 5. ASLI AMAZON DESCRIPTION nikalna (Feature Bullets)
+        let bulletElements = doc.querySelectorAll('#feature-bullets li span.a-list-item');
+        let realDesc = "";
+        if(bulletElements.length > 0) {
+            let bullets = Array.from(bulletElements)
+                .map(el => el.textContent.trim())
+                .filter(text => text.length > 10 && !text.includes('Refund') && !text.includes('Replace'));
+            // Pehle 2-3 point ko description bana lenge
+            realDesc = bullets.slice(0, 2).join(' | ');
+        } else {
+            realDesc = doc.querySelector('#productDescription p')?.textContent.trim() || title;
+        }
+
+        // Fallback agar proxy block ho jaye
         if(!title) {
             const urlParts = link.split('/');
             title = urlParts.find(p => p.length > 15 && !p.includes('amazon'))?.replace(/-/g, ' ') || "Trending Product";
+            realDesc = "Product detail fetch nahi ho payi. Please manually likhein.";
         }
 
+        // 6. Form me Asli Data Daalna
         document.getElementById('aName').value = title;
-        if(price !== '0') {
+        if(price !== '0' && price !== '') {
             document.getElementById('aPrice').value = price;
+            // 40% badha kar Original MRP dikhayenge
             document.getElementById('aOld').value = Math.floor(Number(price) * 1.4); 
         }
         document.getElementById('aLink').value = link;
-        if(img) document.getElementById('aImg').value = img;
+        if(img && img.startsWith('http')) {
+            document.getElementById('aImg').value = img;
+        }
+        if(realDesc) {
+            document.getElementById('aDesc').value = realDesc;
+        }
 
-        btn.textContent = '✨ AI Generating...';
+        btn.textContent = '✨ AI Generating Tags...';
 
-        const prompt = `Act as an e-commerce expert. I have a product titled: "${title}".
-        Provide a JSON response with the following keys exactly:
-        "category" (choose one: Skincare, Makeup, Haircare, Ethnic, Wellness, Accessories, or suggest new 1-word category),
-        "gender" (Male, Female, or Unisex),
-        "desc" (2 sentence catchy Hindi Romanized description),
-        "benefits" (1 sentence short benefit in Hindi Romanized),
-        "emoji" (1 relevant emoji),
-        "tag" (1 short word like Bestseller, Viral, Premium).
-        Return ONLY valid JSON. No markdown, no backticks.`;
+        // 7. Gemini AI se sirf choti cheezein nikalenge (Emoji, Category, Benefit)
+        const prompt = `Act as an e-commerce expert. Product Title: "${title}".
+        Provide ONLY a valid JSON response exactly like this:
+        {
+          "category": "Skincare" (choose from: Skincare, Makeup, Haircare, Ethnic, Wellness, Accessories, Fashion, or Electronics),
+          "gender": "Unisex" (Male, Female, or Unisex),
+          "benefits": "Short 1 sentence benefit in Hindi Romanized",
+          "emoji": "💄",
+          "tag": "Bestseller" (1 short word like Trending, Viral, New)
+        }`;
 
         const aiResponseRaw = await callGemini(prompt);
         const cleanJsonStr = aiResponseRaw.replace(/```json/gi, '').replace(/```/g, '').trim();
         const aiData = JSON.parse(cleanJsonStr);
 
+        // Nayi Category mili toh auto add kar do
         const catDropdown = document.getElementById('aCat');
         let catExists = Array.from(catDropdown.options).some(opt => opt.value === aiData.category);
         if(!catExists && aiData.category) {
             catDropdown.add(new Option(aiData.category, aiData.category));
         }
 
+        // Baki details AI se
         document.getElementById('aCat').value = aiData.category || '';
         document.getElementById('aGender').value = aiData.gender || 'Unisex';
-        document.getElementById('aDesc').value = aiData.desc || '';
         document.getElementById('aBenefits').value = aiData.benefits || '';
         document.getElementById('aEmoji').value = aiData.emoji || '✨';
         document.getElementById('aTag').value = aiData.tag || 'New';
 
-        showT('Auto Fill Done!', '✅');
+        showT('Amazon Data Fetched!', '✅');
 
     } catch(e) {
-        showT('Thoda manual enter karna padega. Name/Link set ho gaya hai.', '⚠️');
+        console.error(e);
+        showT('Thoda manual set karna padega (Amazon Security).', '⚠️');
     }
 
     btn.disabled = false; btn.textContent = '✨ Auto Fill';
 }
-
+// =========================================================================
 function renderAdminList(){
   const el=document.getElementById('adminProdList'); if(!PRODS.length){ el.innerHTML='<div class="empty-msg">Koi product nahi.</div>'; return; }
   el.innerHTML=PRODS.map(p=> {
