@@ -771,11 +771,6 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
       <div class="admin-section show" id="aAdd">
         <div class="admin-form">
           <h3 id="aAddTitle">Naya Affiliate Product Add Karo</h3>
-          
-          <div class="finp full" style="display:flex; gap:10px; background:var(--rose-pale); padding:15px; border-radius:12px; border:1.5px dashed var(--rose); margin-bottom:15px;">
-              <input type="text" id="aAutoLink" class="finp" style="flex:1; border:none;" placeholder="Amazon ka FULL Link paste karein (amzn.to nahi)...">
-              <button class="fsave" style="width:auto; margin:0; padding:10px 20px; box-shadow:none;" onclick="autoFillProduct()" id="btnAutoFill">✨ Auto Fill</button>
-          </div>
 
           <div class="form-grid">
             <input class="finp full" id="aName" placeholder="Product name *" type="text">
@@ -1145,132 +1140,30 @@ function aTab(t){
   else if(t==='list') { document.getElementById('aList').classList.add('show'); renderAdminList(); } 
   else if(t==='addBlog') document.getElementById('aAddBlog').classList.add('show'); 
   else if(t==='listBlog') { document.getElementById('aListBlog').classList.add('show'); renderAdminBlogList(); } 
-  // FIX APPLIED HERE
   else if(t==='cat') document.getElementById('aCatSection').classList.add('show');
 }
 
-// ====================== BULLETPROOF AUTO-FILL LOGIC ======================
-async function autoFillProduct() {
-    const link = document.getElementById('aAutoLink').value.trim();
-    if(!link || !link.includes('http')) { showT('Sahi Amazon link dalein!', '⚠️'); return; }
-
-    if(link.includes('amzn.to')) {
-        showT('Browser se FULL lamba link copy karein, amzn.to kaam nahi karega.', '⚠️');
-        return;
-    }
-
-    const btn = document.getElementById('btnAutoFill');
-    btn.disabled = true; btn.textContent = '⏳ Fetching Data...';
-
-    let title = "";
-    let price = "";
-    let img = "";
-    let realDesc = "";
-
-    try {
-        // Naya aur fast proxy use kar rahe hain
-        const res = await fetch(`https://corsproxy.io/?${encodeURIComponent(link)}`);
-        const htmlText = await res.text();
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(htmlText, "text/html");
-
-        title = doc.querySelector('#productTitle')?.textContent.trim() || '';
-        
-        let priceEl = doc.querySelector('.a-price-whole') || doc.querySelector('#priceblock_ourprice') || doc.querySelector('.a-color-price');
-        price = priceEl ? priceEl.textContent.trim().replace(/[^0-9]/g, '') : '';
-        
-        let imgEl = doc.querySelector('#landingImage') || doc.querySelector('#imgBlkFront') || doc.querySelector('#main-image');
-        if(imgEl) { img = imgEl.getAttribute('data-old-hires') || imgEl.src; }
-
-        let bulletElements = doc.querySelectorAll('#feature-bullets li span.a-list-item');
-        if(bulletElements.length > 0) {
-            let bullets = Array.from(bulletElements).map(el => el.textContent.trim()).filter(text => text.length > 10);
-            realDesc = bullets.slice(0, 2).join(' | ');
-        }
-    } catch(e) {
-        console.log("Amazon ne proxy block ki, Fallback use kar rahe hain.");
-    }
-
-    // 🔥 SMART FALLBACK: Agar Amazon HTML na de, toh Link se naam nikal lenge
-    if(!title) {
-        try {
-            const urlObj = new URL(link);
-            const pathParts = urlObj.pathname.split('/');
-            // URL me se product ka naam dhoondna
-            let slug = pathParts.find(p => p.length > 15 && !p.includes('dp') && !p.includes('product'));
-            if(slug) {
-                title = slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()); // '-' hata kar clean karna
-            } else {
-                title = "Amazing Amazon Product";
-            }
-        } catch(e) {
-            title = "Amazing Amazon Product";
-        }
-    }
-
-    // Form me details daalna shuru
-    document.getElementById('aName').value = title;
-    if(price) {
-        document.getElementById('aPrice').value = price;
-        document.getElementById('aOld').value = Math.floor(Number(price) * 1.4); 
-    }
-    document.getElementById('aLink').value = link;
-    if(img && img.startsWith('http')) document.getElementById('aImg').value = img;
-    if(realDesc) document.getElementById('aDesc').value = realDesc;
-
-    btn.textContent = '✨ AI Magic...';
-
-    try {
-        // AI ko Title dekar baaki saari details generate karwayenge
-        const prompt = `Act as an e-commerce expert. Product Title: "${title}".
-        Provide ONLY a valid JSON response exactly like this:
-        {
-          "category": "Fashion" (choose from: Skincare, Makeup, Haircare, Ethnic, Wellness, Accessories, Fashion),
-          "gender": "Unisex" (Male, Female, or Unisex),
-          "desc": "2 sentence catchy Hindi Romanized description",
-          "benefits": "Short 1 sentence benefit in Hindi Romanized",
-          "emoji": "👗",
-          "tag": "Trending"
-        }`;
-
-        const aiResponseRaw = await callGemini(prompt);
-        const cleanJsonStr = aiResponseRaw.replace(/```json/gi, '').replace(/```/g, '').trim();
-        const aiData = JSON.parse(cleanJsonStr);
-
-        const catDropdown = document.getElementById('aCat');
-        if(!Array.from(catDropdown.options).some(opt => opt.value === aiData.category) && aiData.category) {
-            catDropdown.add(new Option(aiData.category, aiData.category));
-        }
-
-        document.getElementById('aCat').value = aiData.category || '';
-        document.getElementById('aGender').value = aiData.gender || 'Unisex';
-        
-        // Agar proxy se real description nahi aayi, toh AI wali daal do
-        if(!realDesc) document.getElementById('aDesc').value = aiData.desc || '';
-        
-        document.getElementById('aBenefits').value = aiData.benefits || '';
-        document.getElementById('aEmoji').value = aiData.emoji || '✨';
-        document.getElementById('aTag').value = aiData.tag || 'New';
-
-        showT('Auto Fill Done!', '✅');
-    } catch(e) {
-        showT('Sirf naam fetch hua, baaki thoda manual bharein.', '⚠️');
-    }
-
-    btn.disabled = false; btn.textContent = '✨ Auto Fill';
-}function renderAdminList(){
+function renderAdminList(){
   const el=document.getElementById('adminProdList'); if(!PRODS.length){ el.innerHTML='<div class="empty-msg">Koi product nahi.</div>'; return; }
   el.innerHTML=PRODS.map(p=> {
     const cover = (p.images && p.images.length > 0) ? p.images[0] : (p.img || ''); const mediaHTML = cover ? `<img src="${cover}" loading="lazy">` : `${p.emoji||'🌸'}`;
     return `<div class="apcard"><div class="apemoji">${mediaHTML}</div><div class="apinfo"><div class="apcat">${p.cat} ${p.gender?`(${p.gender})`:''}</div><div class="apname">${p.name}</div><div class="apprice">₹${Number(p.price).toLocaleString('en-IN')}</div></div><div class="apactions"><button class="ap-edit" onclick="editProduct('${p.id}')">✏️ Edit</button><button class="ap-del" onclick="delProduct('${p.id}')">🗑️ Delete</button></div></div>`
   }).join('');
 }
+
 function editProduct(id) {
     const p = PRODS.find(x=>x.id===id); if(!p) return; editingProductId = id; document.getElementById('aAddTitle').textContent = "✏️ Edit Product"; document.getElementById('aSaveBtn').innerHTML = "💾 Update Product";
     document.getElementById('aName').value = p.name; document.getElementById('aCat').value = p.cat; document.getElementById('aGender').value = p.gender || 'Unisex'; document.getElementById('aPrice').value = p.price; document.getElementById('aOld').value = p.old || ''; document.getElementById('aEmoji').value = p.emoji || ''; document.getElementById('aImg').value = (p.images && p.images.length>0) ? p.images.join(', ') : (p.img || ''); document.getElementById('aLink').value = p.link || ''; document.getElementById('aDesc').value = p.desc || ''; document.getElementById('aBenefits').value = p.benefits || ''; document.getElementById('aTag').value = p.tag || ''; document.getElementById('aBg').value = p.bg || ''; document.getElementById('aStars').value = p.stars || '★★★★★';
     aTab('add');
 }
-function resetProductForm() { editingProductId = null; document.getElementById('aAddTitle').textContent = "Naya Affiliate Product Add Karo"; document.getElementById('aSaveBtn').innerHTML = "✅ Product Save Karo"; ['aName','aDesc','aBenefits','aPrice','aOld','aEmoji','aImg','aLink','aTag','aBg','aAutoLink'].forEach(id=>document.getElementById(id).value=''); document.getElementById('aFile').value = ''; }
+
+function resetProductForm() { 
+    editingProductId = null; 
+    document.getElementById('aAddTitle').textContent = "Naya Affiliate Product Add Karo"; 
+    document.getElementById('aSaveBtn').innerHTML = "✅ Save Product"; 
+    ['aName','aDesc','aBenefits','aPrice','aOld','aEmoji','aImg','aLink','aTag','aBg'].forEach(id=>document.getElementById(id).value=''); 
+    document.getElementById('aFile').value = ''; 
+}
 
 async function saveProduct() {
   const name=document.getElementById('aName').value.trim(), 
