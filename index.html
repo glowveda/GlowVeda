@@ -1149,121 +1149,116 @@ function aTab(t){
   else if(t==='cat') document.getElementById('aCatSection').classList.add('show');
 }
 
-// ====================== MAGIC AUTO-FILL LOGIC ======================
-// ====================== ASLI AMAZON AUTO-FILL LOGIC ======================
+// ====================== BULLETPROOF AUTO-FILL LOGIC ======================
 async function autoFillProduct() {
     const link = document.getElementById('aAutoLink').value.trim();
     if(!link || !link.includes('http')) { showT('Sahi Amazon link dalein!', '⚠️'); return; }
 
-    // ALERT FOR SHORT LINKS
     if(link.includes('amzn.to')) {
-        showT('Bhai, amzn.to link kaam nahi karega! Browser se FULL link copy karke daalo.', '⚠️');
+        showT('Browser se FULL lamba link copy karein, amzn.to kaam nahi karega.', '⚠️');
         return;
     }
 
     const btn = document.getElementById('btnAutoFill');
-    btn.disabled = true; btn.textContent = '⏳ Fetching Amazon Data...';
+    btn.disabled = true; btn.textContent = '⏳ Fetching Data...';
+
+    let title = "";
+    let price = "";
+    let img = "";
+    let realDesc = "";
 
     try {
-        // 1. Amazon ka HTML Fetch karna
-        const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(link)}`);
-        const data = await res.json();
+        // Naya aur fast proxy use kar rahe hain
+        const res = await fetch(`https://corsproxy.io/?${encodeURIComponent(link)}`);
+        const htmlText = await res.text();
         const parser = new DOMParser();
-        const doc = parser.parseFromString(data.contents, "text/html");
+        const doc = parser.parseFromString(htmlText, "text/html");
 
-        // 2. ASLI TITLE nikalna
-        let title = doc.querySelector('#productTitle')?.textContent.trim() || '';
-
-        // 3. ASLI PRICE nikalna (Multiple tareeke)
+        title = doc.querySelector('#productTitle')?.textContent.trim() || '';
+        
         let priceEl = doc.querySelector('.a-price-whole') || doc.querySelector('#priceblock_ourprice') || doc.querySelector('.a-color-price');
-        let priceRaw = priceEl ? priceEl.textContent.trim() : '0';
-        let price = priceRaw.replace(/[^0-9]/g, '');
-
-        // 4. ASLI IMAGE nikalna (High Quality)
+        price = priceEl ? priceEl.textContent.trim().replace(/[^0-9]/g, '') : '';
+        
         let imgEl = doc.querySelector('#landingImage') || doc.querySelector('#imgBlkFront') || doc.querySelector('#main-image');
-        let img = '';
-        if(imgEl) {
-            // Amazon high-res image 'data-old-hires' me rakhta hai
-            img = imgEl.getAttribute('data-old-hires') || imgEl.src;
-        }
+        if(imgEl) { img = imgEl.getAttribute('data-old-hires') || imgEl.src; }
 
-        // 5. ASLI AMAZON DESCRIPTION nikalna (Feature Bullets)
         let bulletElements = doc.querySelectorAll('#feature-bullets li span.a-list-item');
-        let realDesc = "";
         if(bulletElements.length > 0) {
-            let bullets = Array.from(bulletElements)
-                .map(el => el.textContent.trim())
-                .filter(text => text.length > 10 && !text.includes('Refund') && !text.includes('Replace'));
-            // Pehle 2-3 point ko description bana lenge
+            let bullets = Array.from(bulletElements).map(el => el.textContent.trim()).filter(text => text.length > 10);
             realDesc = bullets.slice(0, 2).join(' | ');
-        } else {
-            realDesc = doc.querySelector('#productDescription p')?.textContent.trim() || title;
         }
+    } catch(e) {
+        console.log("Amazon ne proxy block ki, Fallback use kar rahe hain.");
+    }
 
-        // Fallback agar proxy block ho jaye
-        if(!title) {
-            const urlParts = link.split('/');
-            title = urlParts.find(p => p.length > 15 && !p.includes('amazon'))?.replace(/-/g, ' ') || "Trending Product";
-            realDesc = "Product detail fetch nahi ho payi. Please manually likhein.";
+    // 🔥 SMART FALLBACK: Agar Amazon HTML na de, toh Link se naam nikal lenge
+    if(!title) {
+        try {
+            const urlObj = new URL(link);
+            const pathParts = urlObj.pathname.split('/');
+            // URL me se product ka naam dhoondna
+            let slug = pathParts.find(p => p.length > 15 && !p.includes('dp') && !p.includes('product'));
+            if(slug) {
+                title = slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()); // '-' hata kar clean karna
+            } else {
+                title = "Amazing Amazon Product";
+            }
+        } catch(e) {
+            title = "Amazing Amazon Product";
         }
+    }
 
-        // 6. Form me Asli Data Daalna
-        document.getElementById('aName').value = title;
-        if(price !== '0' && price !== '') {
-            document.getElementById('aPrice').value = price;
-            // 40% badha kar Original MRP dikhayenge
-            document.getElementById('aOld').value = Math.floor(Number(price) * 1.4); 
-        }
-        document.getElementById('aLink').value = link;
-        if(img && img.startsWith('http')) {
-            document.getElementById('aImg').value = img;
-        }
-        if(realDesc) {
-            document.getElementById('aDesc').value = realDesc;
-        }
+    // Form me details daalna shuru
+    document.getElementById('aName').value = title;
+    if(price) {
+        document.getElementById('aPrice').value = price;
+        document.getElementById('aOld').value = Math.floor(Number(price) * 1.4); 
+    }
+    document.getElementById('aLink').value = link;
+    if(img && img.startsWith('http')) document.getElementById('aImg').value = img;
+    if(realDesc) document.getElementById('aDesc').value = realDesc;
 
-        btn.textContent = '✨ AI Generating Tags...';
+    btn.textContent = '✨ AI Magic...';
 
-        // 7. Gemini AI se sirf choti cheezein nikalenge (Emoji, Category, Benefit)
+    try {
+        // AI ko Title dekar baaki saari details generate karwayenge
         const prompt = `Act as an e-commerce expert. Product Title: "${title}".
         Provide ONLY a valid JSON response exactly like this:
         {
-          "category": "Skincare" (choose from: Skincare, Makeup, Haircare, Ethnic, Wellness, Accessories, Fashion, or Electronics),
+          "category": "Fashion" (choose from: Skincare, Makeup, Haircare, Ethnic, Wellness, Accessories, Fashion),
           "gender": "Unisex" (Male, Female, or Unisex),
+          "desc": "2 sentence catchy Hindi Romanized description",
           "benefits": "Short 1 sentence benefit in Hindi Romanized",
-          "emoji": "💄",
-          "tag": "Bestseller" (1 short word like Trending, Viral, New)
+          "emoji": "👗",
+          "tag": "Trending"
         }`;
 
         const aiResponseRaw = await callGemini(prompt);
         const cleanJsonStr = aiResponseRaw.replace(/```json/gi, '').replace(/```/g, '').trim();
         const aiData = JSON.parse(cleanJsonStr);
 
-        // Nayi Category mili toh auto add kar do
         const catDropdown = document.getElementById('aCat');
-        let catExists = Array.from(catDropdown.options).some(opt => opt.value === aiData.category);
-        if(!catExists && aiData.category) {
+        if(!Array.from(catDropdown.options).some(opt => opt.value === aiData.category) && aiData.category) {
             catDropdown.add(new Option(aiData.category, aiData.category));
         }
 
-        // Baki details AI se
         document.getElementById('aCat').value = aiData.category || '';
         document.getElementById('aGender').value = aiData.gender || 'Unisex';
+        
+        // Agar proxy se real description nahi aayi, toh AI wali daal do
+        if(!realDesc) document.getElementById('aDesc').value = aiData.desc || '';
+        
         document.getElementById('aBenefits').value = aiData.benefits || '';
         document.getElementById('aEmoji').value = aiData.emoji || '✨';
         document.getElementById('aTag').value = aiData.tag || 'New';
 
-        showT('Amazon Data Fetched!', '✅');
-
+        showT('Auto Fill Done!', '✅');
     } catch(e) {
-        console.error(e);
-        showT('Thoda manual set karna padega (Amazon Security).', '⚠️');
+        showT('Sirf naam fetch hua, baaki thoda manual bharein.', '⚠️');
     }
 
     btn.disabled = false; btn.textContent = '✨ Auto Fill';
-}
-// =========================================================================
-function renderAdminList(){
+}function renderAdminList(){
   const el=document.getElementById('adminProdList'); if(!PRODS.length){ el.innerHTML='<div class="empty-msg">Koi product nahi.</div>'; return; }
   el.innerHTML=PRODS.map(p=> {
     const cover = (p.images && p.images.length > 0) ? p.images[0] : (p.img || ''); const mediaHTML = cover ? `<img src="${cover}" loading="lazy">` : `${p.emoji||'🌸'}`;
