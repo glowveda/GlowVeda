@@ -1125,24 +1125,26 @@ function openBlog(id) {
     document.getElementById('mTitle').textContent = b.title; 
     document.getElementById('mSub').textContent = b.tag;
 
-    let contentHtml = b.img ? `<img src="${b.img}" loading="lazy" style="width:100%; border-radius:12px; margin-bottom:20px; max-height:300px; object-fit:cover;">` : '';
+    // Image Handle: Agar image link kharab ho toh placeholder dikhayega
+    let imgHtml = b.img ? `<img src="${b.img}" onerror="this.src='https://placehold.co/600x400?text=GlowVeda+Updates'" style="width:100%; border-radius:12px; margin-bottom:20px; max-height:300px; object-fit:cover;">` : '';
     
     let rawContent = b.content || b.desc;
 
-    // 🔥 MAGIC LOGIC: Links aur Hashtags ko clickable banana
-    // 1. URLs ko link banana
-    rawContent = rawContent.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" style="color: #E8305A; font-weight: bold; text-decoration: underline;">$1</a>');
+    // 1. Pehle puraane gande HTML tags ko hatao agar galti se aa gaye hon
+    rawContent = rawContent.replace(/<[^>]*>?/gm, '');
+
+    // 2. Line breaks ko sahi karo
+    rawContent = rawContent.replace(/\n/g, '<br>');
+
+    // 3. Simple Link Scanner (Sirf link ko clickable banayega)
+    rawContent = rawContent.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" style="color: #E8305A; font-weight: bold; text-decoration: underline;">$1</a>');
     
-    // 2. Hashtags (#) ko clickable banana (GlowVeda search par le jayega)
-    rawContent = rawContent.replace(/#(\w+)/g, '<a href="#products" onclick="document.getElementById(\'mainMov\').classList.remove(\'open\')" style="color: #C9A84C; font-weight: bold; cursor: pointer;">#$1</a>');
+    // 4. Hashtag Scanner
+    rawContent = rawContent.replace(/#(\w+)/g, '<a href="#products" onclick="document.getElementById(\'mainMov\').classList.remove(\'open\')" style="color: #C9A84C; font-weight: bold;">#$1</a>');
 
-    contentHtml += rawContent.replace(/\n/g, '<br>');
-
-    document.getElementById('mContent').innerHTML = contentHtml; 
+    document.getElementById('mContent').innerHTML = imgHtml + '<div style="line-height:1.7; color:#333; font-size:15px;">' + rawContent + '</div>'; 
     document.getElementById('mainMov').classList.add('open');
-}
-
-function openAdmin(){ document.getElementById('userMenu').classList.remove('show'); document.getElementById('adminPanel').classList.add('open'); renderAdminList(); renderAdminBlogList(); document.getElementById('aStatCat').textContent = CATS.length; }
+}function openAdmin(){ document.getElementById('userMenu').classList.remove('show'); document.getElementById('adminPanel').classList.add('open'); renderAdminList(); renderAdminBlogList(); document.getElementById('aStatCat').textContent = CATS.length; }
 function closeAdmin(){ document.getElementById('adminPanel').classList.remove('open'); }
 
 function aTab(t){
