@@ -1127,7 +1127,7 @@ function openBlog(id) {
     document.getElementById('mSub').textContent = b.tag;
 
     // Sirf simple line breaks (\n ko <br> mein badalna) taaki text niche ki line mein aaye
-    let contentHtml = b.img ? `<img src="${b.img}" style="width:100%; border-radius:12px; margin-bottom:20px; max-height:300px; object-fit:cover;">` : '';
+    let contentHtml = b.img ? `<img src="${b.img}" style="width:100%; loading="lazy"; border-radius:12px; margin-bottom:20px; max-height:300px; object-fit:cover;">` : '';
     
     // Ye line wahi text dikhayegi jo aapne Admin Panel mein likha hai
     contentHtml += (b.content || b.desc).replace(/\n/g, '<br>');
