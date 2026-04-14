@@ -1127,25 +1127,22 @@ function openBlog(id) {
 
     let rawContent = b.content || b.desc;
 
-    // 1. Sabse pehle puraane HTML tags aur unke andar ke kachre ko saaf karo
-    let cleanText = rawContent.replace(/<[^>]*>?/gm, ''); 
-    
-    // 2. Agar koi bacha-kucha target="_blank" ya style= wala text hai toh use bhi hatao
-    cleanText = cleanText.replace(/target="_blank"|style="[^"]*"|font-weight:|text-decoration:|color:[^;]*;|#products/g, '');
+    // 1. DANGEROUS CLEANING: Ye line har tarah ka CSS kachra uda degi
+    let cleanText = rawContent.replace(/<[^>]*>?/gm, ''); // Remove HTML Tags
+    cleanText = cleanText.replace(/#[0-9A-F]{6}|font-weight:|text-decoration:|underline;|target="_blank"|style=|color:/gi, ''); // Remove CSS Garbage
 
-    // 3. Line breaks ko set karo
+    // 2. Formatting
     let formattedContent = cleanText.replace(/\n/g, '<br>');
 
-    // 4. Sirf "Sahi" Links ko clickable banao
+    // 3. Link Scanner (Jo sirf asli link ko "Open Link" likhega)
     formattedContent = formattedContent.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" style="color: #E8305A; font-weight: bold; text-decoration: underline;">Open Link</a>');
     
-    // 5. Hashtags setup
+    // 4. Hashtag Scanner
     formattedContent = formattedContent.replace(/#(\w+)/g, '<a href="#products" onclick="document.getElementById(\'mainMov\').classList.remove(\'open\')" style="color: #C9A84C; font-weight: bold;">#$1</a>');
 
-    // Image Setup
-    let imgHtml = b.img ? `<img src="${b.img}" onerror="this.src='https://placehold.co/600x400?text=GlowVeda+Coming+Soon'" style="width:100%; border-radius:12px; margin-bottom:20px; max-height:300px; object-fit:cover;">` : '';
+    let imgHtml = b.img ? `<img src="${b.img}" onerror="this.src='https://placehold.co/600x400?text=GlowVeda+Update'" style="width:100%; border-radius:12px; margin-bottom:20px; max-height:300px; object-fit:cover;">` : '';
 
-    document.getElementById('mContent').innerHTML = imgHtml + '<div style="line-height:1.8; color:#333; font-size:15px; word-wrap: break-word;">' + formattedContent + '</div>'; 
+    document.getElementById('mContent').innerHTML = imgHtml + '<div style="line-height:1.8; color:#333; font-size:15px;">' + formattedContent + '</div>'; 
     document.getElementById('mainMov').classList.add('open');
 }
   function openAdmin(){ document.getElementById('userMenu').classList.remove('show'); document.getElementById('adminPanel').classList.add('open'); renderAdminList(); renderAdminBlogList(); document.getElementById('aStatCat').textContent = CATS.length; }
