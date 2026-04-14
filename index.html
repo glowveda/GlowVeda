@@ -1115,11 +1115,27 @@ function openProduct(id) {
 }
 
 function openBlog(id) {
-    const b = BLOGS.find(x=>x.id===id); if(!b) return;
-    document.getElementById('mTitle').textContent = b.title; document.getElementById('mSub').textContent = b.tag;
+    const b = BLOGS.find(x => x.id === id); 
+    if (!b) return;
+
+    document.getElementById('mTitle').textContent = b.title; 
+    document.getElementById('mSub').textContent = b.tag;
+
     let contentHtml = b.img ? `<img src="${b.img}" loading="lazy" style="width:100%; border-radius:12px; margin-bottom:20px; max-height:300px; object-fit:cover;">` : '';
-    contentHtml += (b.content || b.desc).replace(/\n/g,'<br>');
-    document.getElementById('mContent').innerHTML = contentHtml; document.getElementById('mainMov').classList.add('open');
+    
+    let rawContent = b.content || b.desc;
+
+    // 🔥 MAGIC LOGIC: Links aur Hashtags ko clickable banana
+    // 1. URLs ko link banana
+    rawContent = rawContent.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" style="color: #E8305A; font-weight: bold; text-decoration: underline;">$1</a>');
+    
+    // 2. Hashtags (#) ko clickable banana (GlowVeda search par le jayega)
+    rawContent = rawContent.replace(/#(\w+)/g, '<a href="#products" onclick="document.getElementById(\'mainMov\').classList.remove(\'open\')" style="color: #C9A84C; font-weight: bold; cursor: pointer;">#$1</a>');
+
+    contentHtml += rawContent.replace(/\n/g, '<br>');
+
+    document.getElementById('mContent').innerHTML = contentHtml; 
+    document.getElementById('mainMov').classList.add('open');
 }
 
 function openAdmin(){ document.getElementById('userMenu').classList.remove('show'); document.getElementById('adminPanel').classList.add('open'); renderAdminList(); renderAdminBlogList(); document.getElementById('aStatCat').textContent = CATS.length; }
