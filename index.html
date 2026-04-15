@@ -263,7 +263,6 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
 .mov{position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:3000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;padding:20px}.mov.open{opacity:1;pointer-events:all}
 .modal{background:#fff;border-radius:24px;max-width:800px;width:100%;padding:36px;position:relative;animation:modalIn .4s;max-height:90vh;overflow-y:auto}
 @keyframes modalIn{from{transform:scale(.9);opacity:0}to{transform:scale(1);opacity:1}}
-/* SPEED FIX: Added aria-label for accessibility */
 .mcl{position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;border:none;background:var(--rose-pale);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all .2s; z-index:10;}.mcl:hover{background:var(--rose);color:#fff}
 .mtitle{font-family:'Playfair Display',serif;font-size:24px;margin-bottom:8px;color:var(--rose)}.msub{font-size:14px;color:var(--muted);margin-bottom:20px}.mcontent{font-size:15px;line-height:1.8;color:var(--text)}
 
@@ -359,7 +358,7 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
 
 <nav id="navbar">
   <a href="#" class="logo">
-    <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="GlowVeda Logo">
+    <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg" role="img">
       <rect width="42" height="42" rx="12" fill="url(#navG)"/>
       <ellipse cx="21" cy="13" rx="2.8" ry="5.5" fill="white" opacity="0.93"/>
       <ellipse cx="21" cy="13" rx="2.8" ry="5.5" fill="white" opacity="0.93" transform="rotate(45 21 21)"/>
@@ -390,33 +389,33 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
   </ul>
 
   <div class="nav-actions">
-    <button class="btn-outline" id="loginBtn" aria-label="Sign In" onclick="openLogin()">Sign In</button>
+    <button class="btn-outline" id="loginBtn" onclick="openLogin()">Sign In</button>
     <img class="user-avatar" id="userAvatar" src="" alt="User" onclick="toggleUserMenu()">
-        <div class="hamburger" aria-label="Toggle Menu" role="button" tabindex="0" onclick="toggleMNav()"><span></span><span></span><span></span></div>
+    <div class="hamburger" onclick="toggleMNav()"><span></span><span></span><span></span></div>
   </div>
 </nav>
 
 <div class="user-menu" id="userMenu">
   <div class="user-info">
-    <img id="menuAvatar" src="" width="36" height="36" style="border-radius:50%;object-fit:cover" alt="User Menu Avatar">
+    <img id="menuAvatar" src="" width="36" height="36" style="border-radius:50%;object-fit:cover" alt="">
     <div>
       <div class="user-name" id="menuName">User</div>
       <div class="user-email" id="menuEmail">email@gmail.com</div>
     </div>
   </div>
-  <button class="umenu-item" onclick="openAdmin()" aria-label="Admin Panel" id="adminBtn" style="display:none; width:100%;">⚙️ Admin Panel</button>
-  <button class="umenu-item" onclick="signOutUser()" aria-label="Sign Out">🚪 Sign Out</button>
+  <button class="umenu-item" onclick="openAdmin()" id="adminBtn" style="display:none; width:100%;">⚙️ Admin Panel</button>
+  <button class="umenu-item" onclick="signOutUser()">🚪 Sign Out</button>
 </div>
 
 <div class="mnav" id="mobileNav">
-    <button class="mncl" aria-label="Close Menu" onclick="toggleMNav()">✕</button>
+  <button class="mncl" onclick="toggleMNav()">✕</button>
   <a href="#features" onclick="toggleMNav()">Features</a>
   <a href="#products" onclick="toggleMNav(); showAllProds()">Products</a>
   <a href="#blog" onclick="toggleMNav()">Blog</a>
   <a href="#skin" onclick="toggleMNav()">Skin Expert</a>
   <a href="#outfit" onclick="toggleMNav()">Stylist</a>
   <a href="contact.html" onclick="toggleMNav()">Contact</a>
-  <button class="btn-outline" style="margin-top:4px" onclick="toggleMNav();openLogin()" aria-label="Sign In" id="mLoginBtn">Sign In</button>
+  <button class="btn-outline" style="margin-top:4px" onclick="toggleMNav();openLogin()" id="mLoginBtn">Sign In</button>
 </div>
 
 <section class="hero" id="home">
@@ -429,8 +428,8 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
       <h1 class="hero-title">Apni <span class="acc">Beauty</span> ko<br><span class="gld">Nikharein</span></h1>
       <p class="hero-desc">GlowVeda pe aapko milega personalized Skin Analyzer, Outfit Stylist, Beauty Expert — aur India ki best fashion & beauty products — sab ek hi jagah!</p>
       <div class="hero-actions">
-        <button class="btn-primary" aria-label="Free Skin Analysis" onclick="scroll2('skin')">✨ Free Skin Analysis</button>
-        <button class="btn-secondary" aria-label="Products Dekho" onclick="scroll2('products'); showAllProds()">🛍️ Products Dekho</button>
+        <button class="btn-primary" onclick="scroll2('skin')">✨ Free Skin Analysis</button>
+        <button class="btn-secondary" onclick="scroll2('products'); showAllProds()">🛍️ Products Dekho</button>
       </div>
       <div class="hero-stats">
         <div><div class="stat-num" id="heroCustCount">50,241+</div><div class="stat-label">Happy Customers</div></div>
@@ -467,12 +466,12 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
     <p class="sdesc" style="color:rgba(255,255,255,0.6)">Har feature aapki beauty journey ko simple, smart aur enjoyable banata hai.</p>
   </div>
   <div class="feat-grid">
-    <div class="feat-card" onclick="scroll2('skin')"><div class="feat-icon">🔬</div><div class="feat-title">Skin Analyzer</div><div class="feat-desc">Apni skin type aur concerns batao — instant personalized routine milegi. Dermatologist jaisa advice, bilkul free!</div><button class="feat-btn" aria-label="Try Skin Analyzer">Abhi Try Karo →</button></div>
-    <div class="feat-card" onclick="scroll2('outfit')"><div class="feat-icon">👗</div><div class="feat-title">Outfit Stylist</div><div class="feat-desc">Occasion, mood, aur mausam ke hisaab se perfect outfit ideas milenge. Daily styling never felt this easy!</div><button class="feat-btn" aria-label="Try Outfit Stylist">Outfit Dekho →</button></div>
-    <div class="feat-card" onclick="scroll2('chatbot')"><div class="feat-icon">💬</div><div class="feat-title">Beauty Expert Chat</div><div class="feat-desc">24/7 available aapka personal beauty expert. Makeup, skincare, fashion — sab ka jawab milega!</div><button class="feat-btn" aria-label="Try Beauty Expert Chat">Chat Karo →</button></div>
-    <div class="feat-card" onclick="fModal('lookbook')"><div class="feat-icon">📖</div><div class="feat-title">Lookbook</div><div class="feat-desc">Seasonal trends, body type ke hisaab se curated looks — aapka personal style guide.</div><button class="feat-btn" aria-label="View Lookbook">Lookbook Dekho →</button></div>
-    <div class="feat-card" onclick="fModal('color')"><div class="feat-icon">🎨</div><div class="feat-title">Color Match</div><div class="feat-desc">Skin tone ke hisaab se perfect makeup shades aur outfit colors — no more wrong purchases!</div><button class="feat-btn" aria-label="Try Color Match">Match Karo →</button></div>
-    <div class="feat-card" onclick="fModal('routine')"><div class="feat-icon">⏰</div><div class="feat-title">Daily Routine</div><div class="feat-desc">Morning aur night skincare routine — aapki lifestyle ke hisaab se personalized guide.</div><button class="feat-btn" aria-label="Create Daily Routine">Routine Banao →</button></div>
+    <div class="feat-card" onclick="scroll2('skin')"><div class="feat-icon">🔬</div><div class="feat-title">Skin Analyzer</div><div class="feat-desc">Apni skin type aur concerns batao — instant personalized routine milegi. Dermatologist jaisa advice, bilkul free!</div><button class="feat-btn">Abhi Try Karo →</button></div>
+    <div class="feat-card" onclick="scroll2('outfit')"><div class="feat-icon">👗</div><div class="feat-title">Outfit Stylist</div><div class="feat-desc">Occasion, mood, aur mausam ke hisaab se perfect outfit ideas milenge. Daily styling never felt this easy!</div><button class="feat-btn">Outfit Dekho →</button></div>
+    <div class="feat-card" onclick="scroll2('chatbot')"><div class="feat-icon">💬</div><div class="feat-title">Beauty Expert Chat</div><div class="feat-desc">24/7 available aapka personal beauty expert. Makeup, skincare, fashion — sab ka jawab milega!</div><button class="feat-btn">Chat Karo →</button></div>
+    <div class="feat-card" onclick="fModal('lookbook')"><div class="feat-icon">📖</div><div class="feat-title">Lookbook</div><div class="feat-desc">Seasonal trends, body type ke hisaab se curated looks — aapka personal style guide.</div><button class="feat-btn">Lookbook Dekho →</button></div>
+    <div class="feat-card" onclick="fModal('color')"><div class="feat-icon">🎨</div><div class="feat-title">Color Match</div><div class="feat-desc">Skin tone ke hisaab se perfect makeup shades aur outfit colors — no more wrong purchases!</div><button class="feat-btn">Match Karo →</button></div>
+    <div class="feat-card" onclick="fModal('routine')"><div class="feat-icon">⏰</div><div class="feat-title">Daily Routine</div><div class="feat-desc">Morning aur night skincare routine — aapki lifestyle ke hisaab se personalized guide.</div><button class="feat-btn">Routine Banao →</button></div>
   </div>
 </section>
 
@@ -502,14 +501,14 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
         <div class="msg msg-ai"><div class="mav">✿</div><div class="mbub">Namaste! 🌸 Main hun GlowVeda Beauty Expert — aapki beauty aur fashion ki har zaroorat ke liye! Kya help kar sakta hun aaj?</div></div>
       </div>
       <div class="quick-btns">
-        <button class="qbtn" aria-label="Dry Skin Tips" onclick="sendQ('Meri dry skin ke liye routine batao')">Dry Skin Tips</button>
-        <button class="qbtn" aria-label="Wedding Makeup" onclick="sendQ('Wedding makeup tips batao')">Wedding Makeup</button>
-        <button class="qbtn" aria-label="Best Serum" onclick="sendQ('Best face serum kaunsa lun?')">Best Serum</button>
-        <button class="qbtn" aria-label="Summer Trends" onclick="sendQ('Summer fashion trends 2026')">Summer Trends</button>
+        <button class="qbtn" onclick="sendQ('Meri dry skin ke liye routine batao')">Dry Skin Tips</button>
+        <button class="qbtn" onclick="sendQ('Wedding makeup tips batao')">Wedding Makeup</button>
+        <button class="qbtn" onclick="sendQ('Best face serum kaunsa lun?')">Best Serum</button>
+        <button class="qbtn" onclick="sendQ('Summer fashion trends 2026')">Summer Trends</button>
       </div>
       <div class="chat-inp-wrap">
-                <input class="chat-inp" id="chatInp" aria-label="Chat Message Input" placeholder="Kuch bhi poochho..." onkeydown="if(event.key==='Enter')sendChat()">
-        <button class="chat-send" aria-label="Send Message" onclick="sendChat()">➤</button>
+        <input class="chat-inp" id="chatInp" placeholder="Kuch bhi poochho..." onkeydown="if(event.key==='Enter')sendChat()">
+        <button class="chat-send" onclick="sendChat()">➤</button>
       </div>
     </div>
   </div>
@@ -561,8 +560,8 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
         <div class="rtitle">🌿 Aapki Personalized Routine</div>
         <div class="rtext" id="skinTxt"></div>
         <div id="skinFollowupArea" style="margin-top:15px; display:none; gap:10px;">
-                      <input type="text" id="skinFollowupInp" class="chat-inp" aria-label="Ask Followup Question" placeholder="Koi aur sawal? (Jaise: Konsa facewash lu?)" onkeydown="if(event.key==='Enter')askSkinFollowup()">
-           <button class="chat-send" aria-label="Send Question" onclick="askSkinFollowup()" style="width:auto; padding:0 15px; border-radius:50px;">Poocho</button>
+           <input type="text" id="skinFollowupInp" class="chat-inp" placeholder="Koi aur sawal? (Jaise: Konsa facewash lu?)" onkeydown="if(event.key==='Enter')askSkinFollowup()">
+           <button class="chat-send" onclick="askSkinFollowup()" style="width:auto; padding:0 15px; border-radius:50px;">Poocho</button>
         </div>
       </div>
     </div>
@@ -606,8 +605,8 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
         <div class="rtitle">✨ Aapke Liye Perfect Gen-Z Outfit</div>
         <div class="rtext" id="outfitTxt"></div>
         <div id="outfitFollowupArea" style="margin-top:15px; display:none; gap:10px;">
-                      <input type="text" id="outfitFollowupInp" class="chat-inp" aria-label="Ask Followup Question" placeholder="Koi sawal? (Jaise: Konsa joota pehnu?)" onkeydown="if(event.key==='Enter')askOutfitFollowup()">
-           <button class="chat-send" aria-label="Send Question" onclick="askOutfitFollowup()" style="width:auto; padding:0 15px; border-radius:50px;">Poocho</button>
+           <input type="text" id="outfitFollowupInp" class="chat-inp" placeholder="Koi sawal? (Jaise: Konsa joota pehnu?)" onkeydown="if(event.key==='Enter')askOutfitFollowup()">
+           <button class="chat-send" onclick="askOutfitFollowup()" style="width:auto; padding:0 15px; border-radius:50px;">Poocho</button>
         </div>
       </div>
     </div>
@@ -648,10 +647,10 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
     <p>Subscribe karo — weekly beauty tips, new launches, aur exclusive 20% off sirf subscribers ke liye!</p>
     <div class="news-inputs">
       <div class="news-row">
-                <input class="ninp" id="subName" aria-label="Subscriber Name" placeholder="Aapka naam..." type="text">
-        <input class="ninp" id="subEmail" aria-label="Subscriber Email" placeholder="Email address..." type="email">
+        <input class="ninp" id="subName" placeholder="Aapka naam..." type="text">
+        <input class="ninp" id="subEmail" placeholder="Email address..." type="email">
       </div>
-      <button class="nbtn" id="subBtn" aria-label="Subscribe Button" onclick="window.doSubscribe()">Subscribe Karo 💌</button>
+      <button class="nbtn" id="subBtn" onclick="window.doSubscribe()">Subscribe Karo 💌</button>
     </div>
     <p style="color:rgba(255,255,255,0.3);font-size:12px">Aapka email share nahi kiya jayega. Kabhi bhi unsubscribe kar sakte ho.</p>
   </div>
@@ -660,15 +659,15 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
 <footer id="footer">
   <div class="fgrid">
     <div>
-      <a href="#" class="logo" aria-label="GlowVeda Home" style="margin-bottom:16px;display:inline-flex">
+      <a href="#" class="logo" style="margin-bottom:16px;display:inline-flex">
         <svg width="36" height="36" viewBox="0 0 42 42" fill="none"><rect width="42" height="42" rx="12" fill="url(#fg1)"/><ellipse cx="21" cy="13" rx="2.8" ry="5.5" fill="white" opacity="0.93"/><ellipse cx="21" cy="13" rx="2.8" ry="5.5" fill="white" opacity="0.93" transform="rotate(45 21 21)"/><ellipse cx="21" cy="13" rx="2.8" ry="5.5" fill="white" opacity="0.93" transform="rotate(90 21 21)"/><ellipse cx="21" cy="13" rx="2.8" ry="5.5" fill="white" opacity="0.93" transform="rotate(135 21 21)"/><ellipse cx="21" cy="13" rx="2.8" ry="5.5" fill="white" opacity="0.93" transform="rotate(180 21 21)"/><ellipse cx="21" cy="13" rx="2.8" ry="5.5" fill="white" opacity="0.93" transform="rotate(225 21 21)"/><ellipse cx="21" cy="13" rx="2.8" ry="5.5" fill="white" opacity="0.93" transform="rotate(270 21 21)"/><ellipse cx="21" cy="13" rx="2.8" ry="5.5" fill="white" opacity="0.93" transform="rotate(315 21 21)"/><circle cx="21" cy="21" r="5.5" fill="white"/><circle cx="21" cy="21" r="3.2" fill="url(#fg1)"/><defs><linearGradient id="fg1" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#E8305A"/><stop offset="100%" stop-color="#C9A84C"/></linearGradient></defs></svg>
         <span class="logo-text" style="color:white;font-size:24px">Glow<span>Veda</span></span>
       </a>
       <p class="fdesc">India ki #1 Fashion & Beauty destination. Aapki beauty, aapka style — hamesha best. Humara lakshya hai sabhi ko apne best roop mein dikhana.</p>
       <div class="socials">
-        <a class="sbtn" aria-label="Instagram" href="https://instagram.com/glowveda" target="_blank" rel="noopener">📷</a>
-        <a class="sbtn" aria-label="YouTube" href="https://youtube.com/c/glowveda" target="_blank" rel="noopener">▶️</a>
-        <a class="sbtn" aria-label="WhatsApp" href="https://wa.me/919876543210" target="_blank" rel="noopener">💬</a>
+        <a class="sbtn" href="https://instagram.com/glowveda" target="_blank" rel="noopener">📷</a>
+        <a class="sbtn" href="https://youtube.com/c/glowveda" target="_blank" rel="noopener">▶️</a>
+        <a class="sbtn" href="https://wa.me/919876543210" target="_blank" rel="noopener">💬</a>
       </div>
     </div>
     
@@ -707,7 +706,7 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
 
 <div class="mov" id="loginMov" onclick="if(event.target===this)this.classList.remove('open')">
   <div class="login-modal">
-    <button class="mcl" aria-label="Close" onclick="document.getElementById('loginMov').classList.remove('open')">✕</button>
+    <button class="mcl" onclick="document.getElementById('loginMov').classList.remove('open')">✕</button>
     <h2>GlowVeda mein Sign In karo</h2>
     <p>Apni wishlist save karo, orders track karo, aur exclusive offers pao!</p>
     <button class="google-btn" onclick="doGoogleLogin()">
@@ -719,7 +718,7 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
 
 <div class="mov" id="mainMov" onclick="if(event.target===this)this.classList.remove('open')">
   <div class="modal">
-    <button class="mcl" aria-label="Close" onclick="document.getElementById('mainMov').classList.remove('open')">✕</button>
+    <button class="mcl" onclick="document.getElementById('mainMov').classList.remove('open')">✕</button>
     <div class="mtitle" id="mTitle">GlowVeda</div>
     <div class="msub" id="mSub"></div>
     <div class="mcontent" id="mContent"><div class="ldots"><span></span><span></span><span></span></div></div>
@@ -728,7 +727,7 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
 
 <div class="mov" id="prodMov" onclick="if(event.target===this)this.classList.remove('open')">
   <div class="modal pd-wrap">
-    <button class="mcl" aria-label="Close" onclick="document.getElementById('prodMov').classList.remove('open')">✕</button>
+    <button class="mcl" onclick="document.getElementById('prodMov').classList.remove('open')">✕</button>
     
     <div class="pd-left">
       <img id="pdMainImg" class="pd-main-img" src="" alt="Product" loading="lazy">
@@ -755,7 +754,7 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
   <div class="admin-wrap">
     <div class="admin-hdr">
       <div class="admin-title">⚙️ GlowVeda Admin Panel</div>
-      <button class="admin-cl" aria-label="Close Admin" onclick="closeAdmin()">✕</button>
+      <button class="admin-cl" onclick="closeAdmin()">✕</button>
     </div>
     <div class="admin-body">
       <div class="admin-stat-grid">
@@ -777,40 +776,40 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
           <h3 id="aAddTitle">Naya Affiliate Product Add Karo</h3>
           
           <div class="form-grid">
-                        <input class="finp full" id="aName" aria-label="Product Name" placeholder="Product name *" type="text">
-            <select class="finp" id="aCat" aria-label="Product Category">
+            <input class="finp full" id="aName" placeholder="Product name *" type="text">
+            <select class="finp" id="aCat">
               <option value="">Category chunein *</option>
             </select>
-            <select class="finp" id="aGender" aria-label="Product Gender">
+            <select class="finp" id="aGender">
               <option value="Unisex">Unisex / All</option>
               <option value="Male">Men</option>
               <option value="Female">Women</option>
             </select>
-            <input class="finp" id="aPrice" aria-label="Product Price" placeholder="Price (₹) *" type="number">
-            <input class="finp" id="aOld" aria-label="Original Price" placeholder="Original price (₹)" type="number">
+            <input class="finp" id="aPrice" placeholder="Price (₹) *" type="number">
+            <input class="finp" id="aOld" placeholder="Original price (₹)" type="number">
             
             <div class="finp full" style="padding:10px; border:1px dashed var(--rose); background:#fff;">
-                <label style="font-size:12px; display:block; margin-bottom:5px;" for="aFile">Product Photos (Multiple select) Ya URLs dalein:</label>
-                <input type="file" id="aFile" accept="image/*" aria-label="Upload Product Images" multiple style="margin-bottom:8px; display:block;">
-                <input class="finp" id="aImg" aria-label="Image URLs" placeholder="Image URLs (Comma se alag karein agar link daal rahe ho)" type="text" style="width:100%;">
+                <label style="font-size:12px; display:block; margin-bottom:5px;">Product Photos (Multiple select) Ya URLs dalein:</label>
+                <input type="file" id="aFile" accept="image/*" multiple style="margin-bottom:8px; display:block;">
+                <input class="finp" id="aImg" placeholder="Image URLs (Comma se alag karein agar link daal rahe ho)" type="text" style="width:100%;">
             </div>
 
-            <input class="finp" id="aEmoji" aria-label="Emoji Icon" placeholder="Emoji agar image na ho (e.g. 💄)" type="text">
-            <input class="finp full" id="aLink" aria-label="Affiliate Link" placeholder="Product Affiliate Link (e.g. https://amzn.to/...)" type="text">
-            <input class="finp full" id="aDesc" aria-label="Product Description" placeholder="Product description *" type="text">
-            <input class="finp full" id="aBenefits" aria-label="Product Benefits" placeholder="Product ke fayde (Benefits) *" type="text">
+            <input class="finp" id="aEmoji" placeholder="Emoji agar image na ho (e.g. 💄)" type="text">
+            <input class="finp full" id="aLink" placeholder="Product Affiliate Link (e.g. https://amzn.to/...)" type="text">
+            <input class="finp full" id="aDesc" placeholder="Product description *" type="text">
+            <input class="finp full" id="aBenefits" placeholder="Product ke fayde (Benefits) *" type="text">
             
-            <input class="finp" id="aTag" aria-label="Product Tag" placeholder="Tag (e.g. Bestseller)">
-            <input class="finp" id="aBg" aria-label="Background Color" placeholder="Card color (e.g. #fff0f4)" type="text">
-            <select class="finp" id="aStars" aria-label="Product Rating">
+            <input class="finp" id="aTag" placeholder="Tag (e.g. Bestseller)">
+            <input class="finp" id="aBg" placeholder="Card color (e.g. #fff0f4)" type="text">
+            <select class="finp" id="aStars">
               <option value="★★★★★">★★★★★ (5 star)</option>
               <option value="★★★★☆">★★★★☆ (4 star)</option>
               <option value="★★★☆☆">★★★☆☆ (3 star)</option>
             </select>
           </div>
           <div style="display:flex; gap:10px; margin-top:10px;">
-             <button class="fsave" id="aSaveBtn" aria-label="Save Product" onclick="saveProduct()">✅ Save Product</button>
-             <button class="fsave" aria-label="Cancel Product Edit" onclick="resetProductForm()" style="background:#fff; color:var(--dark); border:1px solid #ccc; box-shadow:none;">Cancel</button>
+             <button class="fsave" id="aSaveBtn" onclick="saveProduct()">✅ Save Product</button>
+             <button class="fsave" onclick="resetProductForm()" style="background:#fff; color:var(--dark); border:1px solid #ccc; box-shadow:none;">Cancel</button>
           </div>
         </div>
         <div id="aMsg" style="font-size:14px;text-align:center;margin-top:8px"></div>
@@ -826,11 +825,11 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
         <div class="admin-form">
           <h3 id="bAddTitle">Naya Blog Add Karo</h3>
           <div class="form-grid">
-            <input class="finp full" id="bTitle" aria-label="Blog Title" placeholder="Blog Title *" type="text">
-            <input class="finp full" id="bDesc" aria-label="Blog Short Description" placeholder="Short Description *" type="text">
-            <textarea class="finp full" id="bContent" aria-label="Blog Full Content" placeholder="Full Blog Content (Articles/Tips) *" rows="5"></textarea>
+            <input class="finp full" id="bTitle" placeholder="Blog Title *" type="text">
+            <input class="finp full" id="bDesc" placeholder="Short Description *" type="text">
+            <textarea class="finp full" id="bContent" placeholder="Full Blog Content (Articles/Tips) *" rows="5"></textarea>
             
-            <select class="finp" id="bTag" aria-label="Blog Tag Category">
+            <select class="finp" id="bTag">
   <option value="Fashion">Fashion</option>
   <option value="Skincare">Skincare</option>
   <option value="Grooming">Grooming</option>
@@ -841,17 +840,17 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
   <option value="Haircare">Haircare</option>
   <option value="Accessories">Accessories</option>
 </select>
-            <input class="finp" id="bEmoji" aria-label="Blog Emoji" placeholder="Emoji Icon (e.g. 👗)" type="text" value="✨">
+            <input class="finp" id="bEmoji" placeholder="Emoji Icon (e.g. 👗)" type="text" value="✨">
             
             <div class="finp full" style="padding:10px; border:1px dashed var(--rose); background:#fff;">
-                <label style="font-size:12px; display:block; margin-bottom:5px;" for="bFile">Blog Cover Photo (Optional):</label>
-                <input type="file" id="bFile" accept="image/*" aria-label="Blog Cover Photo File" style="margin-bottom:8px; display:block;">
-                <input class="finp" id="bImg" aria-label="Blog Image URL" placeholder="Ya fir Image URL dalein" type="text" style="width:100%;">
+                <label style="font-size:12px; display:block; margin-bottom:5px;">Blog Cover Photo (Optional):</label>
+                <input type="file" id="bFile" accept="image/*" style="margin-bottom:8px; display:block;">
+                <input class="finp" id="bImg" placeholder="Ya fir Image URL dalein" type="text" style="width:100%;">
             </div>
           </div>
           <div style="display:flex; gap:10px; margin-top:10px;">
-             <button class="fsave" id="bSaveBtn" aria-label="Save Blog" onclick="saveBlog()">✅ Save Blog</button>
-             <button class="fsave" aria-label="Cancel Blog Edit" onclick="resetBlogForm()" style="background:#fff; color:var(--dark); border:1px solid #ccc; box-shadow:none;">Cancel</button>
+             <button class="fsave" id="bSaveBtn" onclick="saveBlog()">✅ Save Blog</button>
+             <button class="fsave" onclick="resetBlogForm()" style="background:#fff; color:var(--dark); border:1px solid #ccc; box-shadow:none;">Cancel</button>
           </div>
         </div>
         <div id="bMsg" style="font-size:14px;text-align:center;margin-top:8px"></div>
@@ -869,26 +868,26 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
           <p style="font-size:12px; color:var(--muted); margin-bottom:15px;">Nayi category banayein, ya purani ko edit/delete karein.</p>
           <div class="form-grid">
             
-            <input class="finp full" id="cNewName" aria-label="New Category Name" placeholder="Nayi Category ka naam likhein (e.g. Perfumes) *">
+            <input class="finp full" id="cNewName" placeholder="Nayi Category ka naam likhein (e.g. Perfumes) *">
             
             <div style="grid-column:1/-1; text-align:center; font-size:12px; color:var(--muted); margin: 8px 0;">--- YA PURANI EDIT/DELETE KAREIN ---</div>
             
-            <select class="finp full" id="cSelectName" aria-label="Select Existing Category" onchange="loadCatForEdit(this.value)">
+            <select class="finp full" id="cSelectName" onchange="loadCatForEdit(this.value)">
               <option value="">Select existing category...</option>
             </select>
             
-            <input class="finp full" id="cEmoji" aria-label="Category Emoji" placeholder="Icon Emoji (e.g. 🧴)" type="text">
+            <input class="finp full" id="cEmoji" placeholder="Icon Emoji (e.g. 🧴)" type="text">
             
             <div class="finp full" style="padding:10px; border:1px dashed var(--rose); background:#fff;">
-                <label style="font-size:12px; display:block; margin-bottom:5px;" for="cFile">Category Photo Upload (Optional):</label>
-                <input type="file" id="cFile" accept="image/*" aria-label="Category File Upload" style="margin-bottom:8px; display:block;">
-                <input class="finp" id="cImg" aria-label="Category Image URL" placeholder="Ya fir Image URL dalein" type="text" style="width:100%;">
+                <label style="font-size:12px; display:block; margin-bottom:5px;">Category Photo Upload (Optional):</label>
+                <input type="file" id="cFile" accept="image/*" style="margin-bottom:8px; display:block;">
+                <input class="finp" id="cImg" placeholder="Ya fir Image URL dalein" type="text" style="width:100%;">
             </div>
           </div>
           <div style="display:flex; gap:10px; margin-top:10px;">
-             <button class="fsave" id="cSaveBtn" aria-label="Save Category" onclick="saveCategory()">✅ Save Category</button>
-             <button class="fsave" id="cDelBtn" aria-label="Delete Category" onclick="deleteCategory()" style="background:#ef4444; color:#fff; border:none; display:none;">🗑️ Delete</button>
-             <button class="fsave" aria-label="Cancel Category Edit" onclick="resetCatForm()" style="background:#fff; color:var(--dark); border:1px solid #ccc; box-shadow:none;">Cancel</button>
+             <button class="fsave" id="cSaveBtn" onclick="saveCategory()">✅ Save Category</button>
+             <button class="fsave" id="cDelBtn" onclick="deleteCategory()" style="background:#ef4444; color:#fff; border:none; display:none;">🗑️ Delete</button>
+             <button class="fsave" onclick="resetCatForm()" style="background:#fff; color:var(--dark); border:1px solid #ccc; box-shadow:none;">Cancel</button>
           </div>
         </div>
       </div>
@@ -1032,8 +1031,8 @@ function renderProds(list){
     const coverImg = (p.images && p.images.length > 0) ? p.images[0] : (p.img || '');
     const mediaHTML = coverImg ? `<img src="${coverImg}" alt="${p.name}" loading="lazy">` : `<span style="font-size:72px">${p.emoji||'🌸'}</span>`;
     const actionBtn = p.link 
-      ? `<a href="${p.link}" target="_blank" onclick="event.stopPropagation();" class="acbtn" aria-label="Buy ${p.name}" style="text-decoration:none; display:inline-flex; align-items:center; background:linear-gradient(135deg,var(--rose),var(--rose-light)); color:#fff; padding:9px 18px; border-radius:50px; font-size:13px; font-weight:600;">Get it Now 🛍️</a>` 
-      : `<button class="acbtn" style="opacity:0.5; cursor:not-allowed;" aria-label="Coming Soon" onclick="event.stopPropagation();">Coming Soon</button>`;
+      ? `<a href="${p.link}" target="_blank" onclick="event.stopPropagation();" class="acbtn" style="text-decoration:none; display:inline-flex; align-items:center; background:linear-gradient(135deg,var(--rose),var(--rose-light)); color:#fff; padding:9px 18px; border-radius:50px; font-size:13px; font-weight:600;">Get it Now 🛍️</a>` 
+      : `<button class="acbtn" style="opacity:0.5; cursor:not-allowed;" onclick="event.stopPropagation();">Coming Soon</button>`;
       
     return `
     <div class="pcard" onclick="openProduct('${p.id}')">
@@ -1078,7 +1077,7 @@ function renderBlogs() {
                 <div class="btag">${b.tag}</div>
                 <h3 class="btitle">${b.title}</h3>
                 <p class="bdesc">${b.desc}</p>
-                <button class="bbtn" aria-label="Read Blog ${b.title}" onclick="openBlog('${b.id}')">Read More →</button>
+                <button class="bbtn" onclick="openBlog('${b.id}')">Read More →</button>
             </div>
         </div>`;
     }).join('');
@@ -1124,32 +1123,20 @@ function openProduct(id) {
 }
 
 function openBlog(id) {
-    const b = BLOGS.find(x => x.id === id); 
-    if (!b) return;
+    const b = BLOGS.find(x => x.id === id); 
+    if (!b) return;
 
-    document.getElementById('mTitle').textContent = b.title; 
-    document.getElementById('mSub').textContent = b.tag;
+    document.getElementById('mTitle').textContent = b.title; 
+    document.getElementById('mSub').textContent = b.tag;
 
-    // Image Handle: Agar image kharab ho toh handle karega
-    let contentHtml = b.img ? `<img src="${b.img}" alt="${b.title}" onerror="this.src='https://placehold.co/600x400?text=GlowVeda+Update'" style="width:100%; border-radius:12px; margin-bottom:20px; max-height:300px; object-fit:cover;" loading="lazy">` : '';
-    
-    let rawContent = b.content || b.desc;
+    // Image section ekdum plain, taaki error na aaye
+    let contentHtml = b.img ? `<img src="${b.img}" onerror="this.src='https://placehold.co/600x400?text=GlowVeda'" style="width:100%; border-radius:12px; margin-bottom:20px; max-height:300px; object-fit:cover;" loading="lazy">` : '';
+    
+    // Yahan KOI BHI HTML Stripper nahi hai! Aapki inline CSS bilkul perfect chalegi.
+    contentHtml += '<div style="line-height:1.8; color:var(--text); font-size:15px;">' + (b.content || b.desc).replace(/\n/g, '<br>') + '</div>';
 
-    // 1. CLEANER: Agar aapne galti se <a href... style...> dala hai, toh ye use saaf kar dega
-    let cleanText = rawContent.replace(/<[^>]*>?/gm, ''); // Remove HTML Tags
-    cleanText = cleanText.replace(/#[0-9A-F]{6}|font-weight:|text-decoration:|underline;|target="_blank"|style=|color:/gi, ''); // Remove CSS Garbage
-
-    // 2. Formatting: Line breaks
-    let formattedContent = cleanText.replace(/\n/g, '<br>');
-
-    // 3. AUTO-LINKER: Sirf sahi URL ko link banayega
-    formattedContent = formattedContent.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" style="color: #E8305A; font-weight: bold; text-decoration: underline;">Open Link</a>');
-    
-    // 4. HASHTAGS
-    formattedContent = formattedContent.replace(/#(\w+)/g, '<a href="#products" onclick="document.getElementById(\'mainMov\').classList.remove(\'open\')" style="color: #C9A84C; font-weight: bold;">#$1</a>');
-
-    document.getElementById('mContent').innerHTML = contentHtml + '<div style="line-height:1.8; color:#333; font-size:15px; word-wrap: break-word;">' + formattedContent + '</div>'; 
-    document.getElementById('mainMov').classList.add('open');
+    document.getElementById('mContent').innerHTML = contentHtml; 
+    document.getElementById('mainMov').classList.add('open');
 }
 
   function openAdmin(){ document.getElementById('userMenu').classList.remove('show'); document.getElementById('adminPanel').classList.add('open'); renderAdminList(); renderAdminBlogList(); document.getElementById('aStatCat').textContent = CATS.length; }
@@ -1170,7 +1157,7 @@ function renderAdminList(){
   const el=document.getElementById('adminProdList'); if(!PRODS.length){ el.innerHTML='<div class="empty-msg">Koi product nahi.</div>'; return; }
   el.innerHTML=PRODS.map(p=> {
     const cover = (p.images && p.images.length > 0) ? p.images[0] : (p.img || ''); const mediaHTML = cover ? `<img src="${cover}" loading="lazy" alt="${p.name}">` : `${p.emoji||'🌸'}`;
-    return `<div class="apcard"><div class="apemoji">${mediaHTML}</div><div class="apinfo"><div class="apcat">${p.cat} ${p.gender?`(${p.gender})`:''}</div><div class="apname">${p.name}</div><div class="apprice">₹${Number(p.price).toLocaleString('en-IN')}</div></div><div class="apactions"><button class="ap-edit" aria-label="Edit Product" onclick="editProduct('${p.id}')">✏️ Edit</button><button class="ap-del" aria-label="Delete Product" onclick="delProduct('${p.id}')">🗑️ Delete</button></div></div>`
+    return `<div class="apcard"><div class="apemoji">${mediaHTML}</div><div class="apinfo"><div class="apcat">${p.cat} ${p.gender?`(${p.gender})`:''}</div><div class="apname">${p.name}</div><div class="apprice">₹${Number(p.price).toLocaleString('en-IN')}</div></div><div class="apactions"><button class="ap-edit" onclick="editProduct('${p.id}')">✏️ Edit</button><button class="ap-del" onclick="delProduct('${p.id}')">🗑️ Delete</button></div></div>`
   }).join('');
 }
 
@@ -1240,7 +1227,7 @@ async function delProduct(id){ 
 
 function renderAdminBlogList(){
   const el=document.getElementById('adminBlogList'); if(!BLOGS.length){ el.innerHTML='<div class="empty-msg">Koi blog nahi.</div>'; return; }
-  el.innerHTML=BLOGS.map(b=> { const mediaHTML = b.img ? `<img src="${b.img}" loading="lazy" alt="${b.title}">` : `${b.imgEmoji||'✨'}`; return `<div class="apcard"><div class="apemoji">${mediaHTML}</div><div class="apinfo"><div class="apcat">${b.tag}</div><div class="apname">${b.title}</div></div><div class="apactions"><button class="ap-edit" aria-label="Edit Blog" onclick="editBlog('${b.id}')">✏️ Edit</button><button class="ap-del" aria-label="Delete Blog" onclick="delBlog('${b.id}')">🗑️ Delete</button></div></div>` }).join('');
+  el.innerHTML=BLOGS.map(b=> { const mediaHTML = b.img ? `<img src="${b.img}" loading="lazy" alt="${b.title}">` : `${b.imgEmoji||'✨'}`; return `<div class="apcard"><div class="apemoji">${mediaHTML}</div><div class="apinfo"><div class="apcat">${b.tag}</div><div class="apname">${b.title}</div></div><div class="apactions"><button class="ap-edit" onclick="editBlog('${b.id}')">✏️ Edit</button><button class="ap-del" onclick="delBlog('${b.id}')">🗑️ Delete</button></div></div>` }).join('');
 }
 function editBlog(id) {
     const b = BLOGS.find(x=>x.id===id); if(!b) return; editingBlogId = id; document.getElementById('bAddTitle').textContent = "✏️ Edit Blog"; document.getElementById('bSaveBtn').innerHTML = "💾 Update Blog";
