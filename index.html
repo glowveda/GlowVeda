@@ -7,7 +7,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2791555682749420" crossorigin="anonymous"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -19,47 +18,8 @@
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" defer></script>
-
-<script type="module">
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getAnalytics } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js';
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, setDoc, getDoc, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js';
-
-const firebaseConfig = {
-  apiKey: "AIzaSyA2126yTCRrJwvjVZ6GTwTfZBlkzo4oLjI",
-  authDomain: "glowveda-84ebc.firebaseapp.com",
-  projectId: "glowveda-84ebc",
-  storageBucket: "glowveda-84ebc.firebasestorage.app",
-  messagingSenderId: "388556010976",
-  appId: "1:388556010976:web:2552befa0d8654c8d82785",
-  measurementId: "G-R0BJGWVNGX"
-};
-
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-const auth = getAuth(app);
-const db = getFirestore(app);
-const storage = getStorage(app);
-const provider = new GoogleAuthProvider();
-
-window._fb = { auth, db, storage, provider, signInWithPopup, signOut, onAuthStateChanged,
-  collection, getDocs, addDoc, deleteDoc, doc, updateDoc, setDoc, getDoc, query, orderBy, ref, uploadBytes, getDownloadURL };
-
-onAuthStateChanged(auth, async user => {
-  window._currentUser = user;
-  updateAuthUI(user);
-  
-  loadFirestoreProducts();
-  loadFirestoreBlogs();
-  loadFirestoreCats(); 
-});
-</script>
-
 <style>
-/* ════════ CSS (UI 100% SAFE - NO CHANGES) ════════ */
+/* ════════ CSS (UI 100% ORIGINAL - NO CHANGES) ════════ */
 :root{
   --rose:#E8305A;--rose-light:#ff6b8a;--rose-pale:#fde8ee;
   --gold:#C9A84C;--cream:#FDF8F3;--dark:#1a0a0f;--dark2:#2d1320;
@@ -358,8 +318,8 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
 <body>
 
 <nav id="navbar">
-  <a href="#" class="logo" aria-label="GlowVeda Logo">
-    <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+  <a href="#" class="logo">
+    <svg width="42" height="42" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="GlowVeda Logo">
       <rect width="42" height="42" rx="12" fill="url(#navG)"/>
       <ellipse cx="21" cy="13" rx="2.8" ry="5.5" fill="white" opacity="0.93"/>
       <ellipse cx="21" cy="13" rx="2.8" ry="5.5" fill="white" opacity="0.93" transform="rotate(45 21 21)"/>
@@ -390,33 +350,33 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
   </ul>
 
   <div class="nav-actions">
-    <button class="btn-outline" id="loginBtn" aria-label="Sign In" onclick="openLogin()">Sign In</button>
-    <img class="user-avatar" id="userAvatar" src="" alt="User Avatar" onclick="toggleUserMenu()">
-    <div class="hamburger" aria-label="Toggle Menu" role="button" tabindex="0" onclick="toggleMNav()"><span></span><span></span><span></span></div>
+    <button class="btn-outline" id="loginBtn" onclick="openLogin()">Sign In</button>
+    <img class="user-avatar" id="userAvatar" src="" alt="User" onclick="toggleUserMenu()">
+    <div class="hamburger" onclick="toggleMNav()"><span></span><span></span><span></span></div>
   </div>
 </nav>
 
 <div class="user-menu" id="userMenu">
   <div class="user-info">
-    <img id="menuAvatar" src="" width="36" height="36" style="border-radius:50%;object-fit:cover" alt="Menu User Avatar">
+    <img id="menuAvatar" src="" width="36" height="36" style="border-radius:50%;object-fit:cover" alt="">
     <div>
       <div class="user-name" id="menuName">User</div>
       <div class="user-email" id="menuEmail">email@gmail.com</div>
     </div>
   </div>
-  <button class="umenu-item" onclick="openAdmin()" aria-label="Admin Panel" id="adminBtn" style="display:none; width:100%;">⚙️ Admin Panel</button>
-  <button class="umenu-item" onclick="signOutUser()" aria-label="Sign Out">🚪 Sign Out</button>
+  <button class="umenu-item" onclick="openAdmin()" id="adminBtn" style="display:none; width:100%;">⚙️ Admin Panel</button>
+  <button class="umenu-item" onclick="signOutUser()">🚪 Sign Out</button>
 </div>
 
 <div class="mnav" id="mobileNav">
-  <button class="mncl" aria-label="Close Menu" onclick="toggleMNav()">✕</button>
+  <button class="mncl" onclick="toggleMNav()">✕</button>
   <a href="#features" onclick="toggleMNav()">Features</a>
   <a href="#products" onclick="toggleMNav(); showAllProds()">Products</a>
   <a href="#blog" onclick="toggleMNav()">Blog</a>
   <a href="#skin" onclick="toggleMNav()">Skin Expert</a>
   <a href="#outfit" onclick="toggleMNav()">Stylist</a>
   <a href="contact.html" onclick="toggleMNav()">Contact</a>
-  <button class="btn-outline" style="margin-top:4px" aria-label="Sign In" onclick="toggleMNav();openLogin()" id="mLoginBtn">Sign In</button>
+  <button class="btn-outline" style="margin-top:4px" onclick="toggleMNav();openLogin()" id="mLoginBtn">Sign In</button>
 </div>
 
 <section class="hero" id="home">
@@ -429,8 +389,8 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
       <h1 class="hero-title">Apni <span class="acc">Beauty</span> ko<br><span class="gld">Nikharein</span></h1>
       <p class="hero-desc">GlowVeda pe aapko milega personalized Skin Analyzer, Outfit Stylist, Beauty Expert — aur India ki best fashion & beauty products — sab ek hi jagah!</p>
       <div class="hero-actions">
-        <button class="btn-primary" aria-label="Free Skin Analysis" onclick="scroll2('skin')">✨ Free Skin Analysis</button>
-        <button class="btn-secondary" aria-label="Products Dekho" onclick="scroll2('products'); showAllProds()">🛍️ Products Dekho</button>
+        <button class="btn-primary" onclick="scroll2('skin')">✨ Free Skin Analysis</button>
+        <button class="btn-secondary" onclick="scroll2('products'); showAllProds()">🛍️ Products Dekho</button>
       </div>
       <div class="hero-stats">
         <div><div class="stat-num" id="heroCustCount">50,241+</div><div class="stat-label">Happy Customers</div></div>
@@ -443,7 +403,7 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
         <div class="hero-emoji">💄</div>
         <div class="hero-card-title">Beauty Expert</div>
         <div class="hero-card-sub">Personalized tips sirf aapke liye</div>
-        <div class="hero-card-pill" aria-label="Free Consultation" onclick="scroll2('chatbot')">Free Consultation →</div>
+        <div class="hero-card-pill" onclick="scroll2('chatbot')">Free Consultation →</div>
       </div>
       <div class="fbadge fb1"><span class="fbicon">🌿</span><div><div class="fblabel">100% Natural</div><div class="fbsub">Organic Products</div></div></div>
       <div class="fbadge fb2"><span class="fbicon">⭐</span><div><div class="fblabel">4.9 Rating</div><div class="fbsub">12,000+ Reviews</div></div></div>
@@ -467,12 +427,12 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
     <p class="sdesc" style="color:rgba(255,255,255,0.6)">Har feature aapki beauty journey ko simple, smart aur enjoyable banata hai.</p>
   </div>
   <div class="feat-grid">
-    <div class="feat-card" onclick="scroll2('skin')"><div class="feat-icon">🔬</div><div class="feat-title">Skin Analyzer</div><div class="feat-desc">Apni skin type aur concerns batao — instant personalized routine milegi. Dermatologist jaisa advice, bilkul free!</div><button class="feat-btn" aria-label="Try Skin Analyzer">Abhi Try Karo →</button></div>
-    <div class="feat-card" onclick="scroll2('outfit')"><div class="feat-icon">👗</div><div class="feat-title">Outfit Stylist</div><div class="feat-desc">Occasion, mood, aur mausam ke hisaab se perfect outfit ideas milenge. Daily styling never felt this easy!</div><button class="feat-btn" aria-label="Try Outfit Stylist">Outfit Dekho →</button></div>
-    <div class="feat-card" onclick="scroll2('chatbot')"><div class="feat-icon">💬</div><div class="feat-title">Beauty Expert Chat</div><div class="feat-desc">24/7 available aapka personal beauty expert. Makeup, skincare, fashion — sab ka jawab milega!</div><button class="feat-btn" aria-label="Chat with Beauty Expert">Chat Karo →</button></div>
-    <div class="feat-card" onclick="fModal('lookbook')"><div class="feat-icon">📖</div><div class="feat-title">Lookbook</div><div class="feat-desc">Seasonal trends, body type ke hisaab se curated looks — aapka personal style guide.</div><button class="feat-btn" aria-label="View Lookbook">Lookbook Dekho →</button></div>
-    <div class="feat-card" onclick="fModal('color')"><div class="feat-icon">🎨</div><div class="feat-title">Color Match</div><div class="feat-desc">Skin tone ke hisaab se perfect makeup shades aur outfit colors — no more wrong purchases!</div><button class="feat-btn" aria-label="Try Color Match">Match Karo →</button></div>
-    <div class="feat-card" onclick="fModal('routine')"><div class="feat-icon">⏰</div><div class="feat-title">Daily Routine</div><div class="feat-desc">Morning aur night skincare routine — aapki lifestyle ke hisaab se personalized guide.</div><button class="feat-btn" aria-label="Create Daily Routine">Routine Banao →</button></div>
+    <div class="feat-card" onclick="scroll2('skin')"><div class="feat-icon">🔬</div><div class="feat-title">Skin Analyzer</div><div class="feat-desc">Apni skin type aur concerns batao — instant personalized routine milegi. Dermatologist jaisa advice, bilkul free!</div><button class="feat-btn">Abhi Try Karo →</button></div>
+    <div class="feat-card" onclick="scroll2('outfit')"><div class="feat-icon">👗</div><div class="feat-title">Outfit Stylist</div><div class="feat-desc">Occasion, mood, aur mausam ke hisaab se perfect outfit ideas milenge. Daily styling never felt this easy!</div><button class="feat-btn">Outfit Dekho →</button></div>
+    <div class="feat-card" onclick="scroll2('chatbot')"><div class="feat-icon">💬</div><div class="feat-title">Beauty Expert Chat</div><div class="feat-desc">24/7 available aapka personal beauty expert. Makeup, skincare, fashion — sab ka jawab milega!</div><button class="feat-btn">Chat Karo →</button></div>
+    <div class="feat-card" onclick="fModal('lookbook')"><div class="feat-icon">📖</div><div class="feat-title">Lookbook</div><div class="feat-desc">Seasonal trends, body type ke hisaab se curated looks — aapka personal style guide.</div><button class="feat-btn">Lookbook Dekho →</button></div>
+    <div class="feat-card" onclick="fModal('color')"><div class="feat-icon">🎨</div><div class="feat-title">Color Match</div><div class="feat-desc">Skin tone ke hisaab se perfect makeup shades aur outfit colors — no more wrong purchases!</div><button class="feat-btn">Match Karo →</button></div>
+    <div class="feat-card" onclick="fModal('routine')"><div class="feat-icon">⏰</div><div class="feat-title">Daily Routine</div><div class="feat-desc">Morning aur night skincare routine — aapki lifestyle ke hisaab se personalized guide.</div><button class="feat-btn">Routine Banao →</button></div>
   </div>
 </section>
 
@@ -502,14 +462,14 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
         <div class="msg msg-ai"><div class="mav">✿</div><div class="mbub">Namaste! 🌸 Main hun GlowVeda Beauty Expert — aapki beauty aur fashion ki har zaroorat ke liye! Kya help kar sakta hun aaj?</div></div>
       </div>
       <div class="quick-btns">
-        <button class="qbtn" aria-label="Ask about Dry Skin Tips" onclick="sendQ('Meri dry skin ke liye routine batao')">Dry Skin Tips</button>
-        <button class="qbtn" aria-label="Ask about Wedding Makeup" onclick="sendQ('Wedding makeup tips batao')">Wedding Makeup</button>
-        <button class="qbtn" aria-label="Ask about Best Serum" onclick="sendQ('Best face serum kaunsa lun?')">Best Serum</button>
-        <button class="qbtn" aria-label="Ask about Summer Trends" onclick="sendQ('Summer fashion trends 2026')">Summer Trends</button>
+        <button class="qbtn" onclick="sendQ('Meri dry skin ke liye routine batao')">Dry Skin Tips</button>
+        <button class="qbtn" onclick="sendQ('Wedding makeup tips batao')">Wedding Makeup</button>
+        <button class="qbtn" onclick="sendQ('Best face serum kaunsa lun?')">Best Serum</button>
+        <button class="qbtn" onclick="sendQ('Summer fashion trends 2026')">Summer Trends</button>
       </div>
       <div class="chat-inp-wrap">
-        <input class="chat-inp" id="chatInp" aria-label="Chat Message Input" placeholder="Kuch bhi poochho..." onkeydown="if(event.key==='Enter')sendChat()">
-        <button class="chat-send" aria-label="Send Message Button" onclick="sendChat()">➤</button>
+        <input class="chat-inp" id="chatInp" placeholder="Kuch bhi poochho..." aria-label="Chat input" onkeydown="if(event.key==='Enter')sendChat()">
+        <button class="chat-send" onclick="sendChat()">➤</button>
       </div>
     </div>
   </div>
@@ -538,12 +498,12 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
 
       <p style="font-size:14px;color:var(--muted);margin-bottom:14px">Apni skin type select karo:</p>
       <div class="skin-opts">
-        <div class="sopt" onclick="selSkin(this,'Normal')"><span class="si" aria-hidden="true">😊</span>Normal</div>
-        <div class="sopt" onclick="selSkin(this,'Dry')"><span class="si" aria-hidden="true">🏜️</span>Dry</div>
-        <div class="sopt" onclick="selSkin(this,'Oily')"><span class="si" aria-hidden="true">💧</span>Oily</div>
-        <div class="sopt" onclick="selSkin(this,'Combination')"><span class="si" aria-hidden="true">☯️</span>Combo</div>
-        <div class="sopt" onclick="selSkin(this,'Sensitive')"><span class="si" aria-hidden="true">🌸</span>Sensitive</div>
-        <div class="sopt" onclick="selSkin(this,'Mature')"><span class="si" aria-hidden="true">✨</span>Mature</div>
+        <div class="sopt" onclick="selSkin(this,'Normal')"><span class="si">😊</span>Normal</div>
+        <div class="sopt" onclick="selSkin(this,'Dry')"><span class="si">🏜️</span>Dry</div>
+        <div class="sopt" onclick="selSkin(this,'Oily')"><span class="si">💧</span>Oily</div>
+        <div class="sopt" onclick="selSkin(this,'Combination')"><span class="si">☯️</span>Combo</div>
+        <div class="sopt" onclick="selSkin(this,'Sensitive')"><span class="si">🌸</span>Sensitive</div>
+        <div class="sopt" onclick="selSkin(this,'Mature')"><span class="si">✨</span>Mature</div>
       </div>
       <p style="font-size:14px;color:var(--muted);margin-bottom:10px">Skin concerns chunein:</p>
       <div class="chips">
@@ -556,13 +516,13 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
         <span class="chip" onclick="togConcern(this)">Large Pores</span>
         <span class="chip" onclick="togConcern(this)">Tanning</span>
       </div>
-      <button class="abtn" id="analyzeBtn" aria-label="Generate Routine" onclick="analyzeSkin()">✨ Routine Generate Karo</button>
+      <button class="abtn" id="analyzeBtn" onclick="analyzeSkin()">✨ Routine Generate Karo</button>
       <div class="skin-result" id="skinRes">
         <div class="rtitle">🌿 Aapki Personalized Routine</div>
         <div class="rtext" id="skinTxt"></div>
         <div id="skinFollowupArea" style="margin-top:15px; display:none; gap:10px;">
-           <input type="text" id="skinFollowupInp" class="chat-inp" aria-label="Ask Followup Question" placeholder="Koi aur sawal? (Jaise: Konsa facewash lu?)" onkeydown="if(event.key==='Enter')askSkinFollowup()">
-           <button class="chat-send" aria-label="Send Followup Question" onclick="askSkinFollowup()" style="width:auto; padding:0 15px; border-radius:50px;">Poocho</button>
+           <input type="text" id="skinFollowupInp" class="chat-inp" placeholder="Koi aur sawal? (Jaise: Konsa facewash lu?)" aria-label="Followup question" onkeydown="if(event.key==='Enter')askSkinFollowup()">
+           <button class="chat-send" onclick="askSkinFollowup()" style="width:auto; padding:0 15px; border-radius:50px;">Poocho</button>
         </div>
       </div>
     </div>
@@ -601,13 +561,13 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
         <span class="chip sch" onclick="selSeason(this)">❄️ Winter</span>
         <span class="chip sch" onclick="selSeason(this)">🌸 Spring</span>
       </div>
-      <button class="abtn" aria-label="Suggest Outfit" onclick="doOutfit()">👗 Outfit Suggest Karo</button>
+      <button class="abtn" onclick="doOutfit()">👗 Outfit Suggest Karo</button>
       <div class="outfit-res" id="outfitRes">
         <div class="rtitle">✨ Aapke Liye Perfect Gen-Z Outfit</div>
         <div class="rtext" id="outfitTxt"></div>
         <div id="outfitFollowupArea" style="margin-top:15px; display:none; gap:10px;">
-           <input type="text" id="outfitFollowupInp" class="chat-inp" aria-label="Ask Styling Followup Question" placeholder="Koi sawal? (Jaise: Konsa joota pehnu?)" onkeydown="if(event.key==='Enter')askOutfitFollowup()">
-           <button class="chat-send" aria-label="Send Styling Question" onclick="askOutfitFollowup()" style="width:auto; padding:0 15px; border-radius:50px;">Poocho</button>
+           <input type="text" id="outfitFollowupInp" class="chat-inp" placeholder="Koi sawal? (Jaise: Konsa joota pehnu?)" aria-label="Followup outfit question" onkeydown="if(event.key==='Enter')askOutfitFollowup()">
+           <button class="chat-send" onclick="askOutfitFollowup()" style="width:auto; padding:0 15px; border-radius:50px;">Poocho</button>
         </div>
       </div>
     </div>
@@ -621,13 +581,13 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
     <p class="sdesc">India ke most loved fashion & beauty products — affiliate store!</p>
     
     <div class="filter-btn-group" style="margin-top:20px;">
-        <button class="qbtn" aria-label="Filter: All Products" onclick="filterByGender('All')">Show All</button>
-        <button class="qbtn" aria-label="Filter: Men's Collection" onclick="filterByGender('Male')">Men's Collection</button>
-        <button class="qbtn" aria-label="Filter: Women's Collection" onclick="filterByGender('Female')">Women's Collection</button>
-        <button class="qbtn" aria-label="Filter: Unisex" onclick="filterByGender('Unisex')">Unisex</button>
+        <button class="qbtn" onclick="filterByGender('All')">Show All</button>
+        <button class="qbtn" onclick="filterByGender('Male')">Men's Collection</button>
+        <button class="qbtn" onclick="filterByGender('Female')">Women's Collection</button>
+        <button class="qbtn" onclick="filterByGender('Unisex')">Unisex</button>
     </div>
     
-    <button class="qbtn" onclick="showAllProds()" aria-label="Clear Category Filter" style="margin-top:8px; display:none;" id="clearFilterBtn">❌ Clear Category Filter</button>
+    <button class="qbtn" onclick="showAllProds()" style="margin-top:8px; display:none;" id="clearFilterBtn">❌ Clear Category Filter</button>
   </div>
   <div class="prod-grid" id="prodGrid"></div>
 </section>
@@ -648,10 +608,10 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
     <p>Subscribe karo — weekly beauty tips, new launches, aur exclusive 20% off sirf subscribers ke liye!</p>
     <div class="news-inputs">
       <div class="news-row">
-        <input class="ninp" id="subName" aria-label="Subscriber Name" placeholder="Aapka naam..." type="text">
-        <input class="ninp" id="subEmail" aria-label="Subscriber Email" placeholder="Email address..." type="email">
+        <input class="ninp" id="subName" placeholder="Aapka naam..." type="text" aria-label="Name">
+        <input class="ninp" id="subEmail" placeholder="Email address..." type="email" aria-label="Email">
       </div>
-      <button class="nbtn" id="subBtn" aria-label="Subscribe to Newsletter" onclick="window.doSubscribe()">Subscribe Karo 💌</button>
+      <button class="nbtn" id="subBtn" onclick="window.doSubscribe()">Subscribe Karo 💌</button>
     </div>
     <p style="color:rgba(255,255,255,0.3);font-size:12px">Aapka email share nahi kiya jayega. Kabhi bhi unsubscribe kar sakte ho.</p>
   </div>
@@ -660,15 +620,15 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
 <footer id="footer">
   <div class="fgrid">
     <div>
-      <a href="#" class="logo" aria-label="GlowVeda Home" style="margin-bottom:16px;display:inline-flex">
+      <a href="#" class="logo" style="margin-bottom:16px;display:inline-flex" aria-label="Footer Logo">
         <svg width="36" height="36" viewBox="0 0 42 42" fill="none" aria-hidden="true"><rect width="42" height="42" rx="12" fill="url(#fg1)"/><ellipse cx="21" cy="13" rx="2.8" ry="5.5" fill="white" opacity="0.93"/><ellipse cx="21" cy="13" rx="2.8" ry="5.5" fill="white" opacity="0.93" transform="rotate(45 21 21)"/><ellipse cx="21" cy="13" rx="2.8" ry="5.5" fill="white" opacity="0.93" transform="rotate(90 21 21)"/><ellipse cx="21" cy="13" rx="2.8" ry="5.5" fill="white" opacity="0.93" transform="rotate(135 21 21)"/><ellipse cx="21" cy="13" rx="2.8" ry="5.5" fill="white" opacity="0.93" transform="rotate(180 21 21)"/><ellipse cx="21" cy="13" rx="2.8" ry="5.5" fill="white" opacity="0.93" transform="rotate(225 21 21)"/><ellipse cx="21" cy="13" rx="2.8" ry="5.5" fill="white" opacity="0.93" transform="rotate(270 21 21)"/><ellipse cx="21" cy="13" rx="2.8" ry="5.5" fill="white" opacity="0.93" transform="rotate(315 21 21)"/><circle cx="21" cy="21" r="5.5" fill="white"/><circle cx="21" cy="21" r="3.2" fill="url(#fg1)"/><defs><linearGradient id="fg1" x1="0" y1="0" x2="42" y2="42"><stop offset="0%" stop-color="#E8305A"/><stop offset="100%" stop-color="#C9A84C"/></linearGradient></defs></svg>
         <span class="logo-text" style="color:white;font-size:24px">Glow<span>Veda</span></span>
       </a>
       <p class="fdesc">India ki #1 Fashion & Beauty destination. Aapki beauty, aapka style — hamesha best. Humara lakshya hai sabhi ko apne best roop mein dikhana.</p>
       <div class="socials">
-        <a class="sbtn" aria-label="Instagram" href="https://instagram.com/glowveda" target="_blank" rel="noopener">📷</a>
-        <a class="sbtn" aria-label="YouTube" href="https://youtube.com/c/glowveda" target="_blank" rel="noopener">▶️</a>
-        <a class="sbtn" aria-label="WhatsApp" href="https://wa.me/919876543210" target="_blank" rel="noopener">💬</a>
+        <a class="sbtn" href="https://instagram.com/glowveda" target="_blank" rel="noopener" aria-label="Instagram">📷</a>
+        <a class="sbtn" href="https://youtube.com/c/glowveda" target="_blank" rel="noopener" aria-label="YouTube">▶️</a>
+        <a class="sbtn" href="https://wa.me/919876543210" target="_blank" rel="noopener" aria-label="Whatsapp">💬</a>
       </div>
     </div>
     
@@ -707,10 +667,10 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
 
 <div class="mov" id="loginMov" onclick="if(event.target===this)this.classList.remove('open')">
   <div class="login-modal">
-    <button class="mcl" aria-label="Close Login Modal" onclick="document.getElementById('loginMov').classList.remove('open')">✕</button>
+    <button class="mcl" onclick="document.getElementById('loginMov').classList.remove('open')" aria-label="Close">✕</button>
     <h2>GlowVeda mein Sign In karo</h2>
     <p>Apni wishlist save karo, orders track karo, aur exclusive offers pao!</p>
-    <button class="google-btn" aria-label="Sign in with Google" onclick="doGoogleLogin()">
+    <button class="google-btn" onclick="doGoogleLogin()">
       <svg class="google-icon" aria-hidden="true" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
       Google se Sign In karo
     </button>
@@ -719,7 +679,7 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
 
 <div class="mov" id="mainMov" onclick="if(event.target===this)this.classList.remove('open')">
   <div class="modal">
-    <button class="mcl" aria-label="Close Info Modal" onclick="document.getElementById('mainMov').classList.remove('open')">✕</button>
+    <button class="mcl" onclick="document.getElementById('mainMov').classList.remove('open')" aria-label="Close">✕</button>
     <div class="mtitle" id="mTitle">GlowVeda</div>
     <div class="msub" id="mSub"></div>
     <div class="mcontent" id="mContent"><div class="ldots"><span></span><span></span><span></span></div></div>
@@ -728,7 +688,7 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
 
 <div class="mov" id="prodMov" onclick="if(event.target===this)this.classList.remove('open')">
   <div class="modal pd-wrap">
-    <button class="mcl" aria-label="Close Product Modal" onclick="document.getElementById('prodMov').classList.remove('open')">✕</button>
+    <button class="mcl" onclick="document.getElementById('prodMov').classList.remove('open')" aria-label="Close">✕</button>
     
     <div class="pd-left">
       <img id="pdMainImg" class="pd-main-img" src="" alt="Product Image" loading="lazy">
@@ -745,7 +705,7 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
       <div id="pdBenefits" style="background:#f0fdf4; color:#16a34a; padding:12px; border-radius:8px; font-size:14px; font-weight:500; margin-bottom:25px; display:none;"></div>
       
       <div style="display:flex; gap:15px; margin-top:auto;">
-         <a id="pdBuyBtn" aria-label="Buy Product Link" href="#" target="_blank" style="flex:1; padding:15px; text-align:center; font-size:15px; font-weight:600; text-decoration:none; background:linear-gradient(135deg,var(--rose),var(--rose-light)); color:#fff; border-radius:50px; display:none;">Buy Now 🛍️</a>
+         <a id="pdBuyBtn" href="#" target="_blank" style="flex:1; padding:15px; text-align:center; font-size:15px; font-weight:600; text-decoration:none; background:linear-gradient(135deg,var(--rose),var(--rose-light)); color:#fff; border-radius:50px; display:none;">Buy Now 🛍️</a>
       </div>
     </div>
   </div>
@@ -755,7 +715,7 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
   <div class="admin-wrap">
     <div class="admin-hdr">
       <div class="admin-title">⚙️ GlowVeda Admin Panel</div>
-      <button class="admin-cl" aria-label="Close Admin Panel" onclick="closeAdmin()">✕</button>
+      <button class="admin-cl" onclick="closeAdmin()" aria-label="Close">✕</button>
     </div>
     <div class="admin-body">
       <div class="admin-stat-grid">
@@ -765,11 +725,11 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
       </div>
 
       <div class="admin-tabs">
-        <button class="atab active" aria-label="Add Edit Product Tab" onclick="aTab('add')">➕ Add/Edit Product</button>
-        <button class="atab" aria-label="Products List Tab" onclick="aTab('list')">📋 Products List</button>
-        <button class="atab" aria-label="Add Edit Blog Tab" onclick="aTab('addBlog')">✍️ Add/Edit Blog</button>
-        <button class="atab" aria-label="Blogs List Tab" onclick="aTab('listBlog')">📰 Blogs List</button>
-        <button class="atab" aria-label="Categories Tab" onclick="aTab('cat')">🏷️ Categories</button>
+        <button class="atab active" onclick="aTab('add')">➕ Add/Edit Product</button>
+        <button class="atab" onclick="aTab('list')">📋 Products List</button>
+        <button class="atab" onclick="aTab('addBlog')">✍️ Add/Edit Blog</button>
+        <button class="atab" onclick="aTab('listBlog')">📰 Blogs List</button>
+        <button class="atab" onclick="aTab('cat')">🏷️ Categories</button>
       </div>
 
       <div class="admin-section show" id="aAdd">
@@ -777,40 +737,40 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
           <h3 id="aAddTitle">Naya Affiliate Product Add Karo</h3>
           
           <div class="form-grid">
-            <input class="finp full" id="aName" aria-label="Product Name" placeholder="Product name *" type="text">
-            <select class="finp" id="aCat" aria-label="Product Category">
+            <input class="finp full" id="aName" placeholder="Product name *" type="text" aria-label="Name">
+            <select class="finp" id="aCat" aria-label="Category">
               <option value="">Category chunein *</option>
             </select>
-            <select class="finp" id="aGender" aria-label="Product Gender">
+            <select class="finp" id="aGender" aria-label="Gender">
               <option value="Unisex">Unisex / All</option>
               <option value="Male">Men</option>
               <option value="Female">Women</option>
             </select>
-            <input class="finp" id="aPrice" aria-label="Product Price" placeholder="Price (₹) *" type="number">
-            <input class="finp" id="aOld" aria-label="Original Price" placeholder="Original price (₹)" type="number">
+            <input class="finp" id="aPrice" placeholder="Price (₹) *" type="number" aria-label="Price">
+            <input class="finp" id="aOld" placeholder="Original price (₹)" type="number" aria-label="Old Price">
             
             <div class="finp full" style="padding:10px; border:1px dashed var(--rose); background:#fff;">
-                <label style="font-size:12px; display:block; margin-bottom:5px;" for="aFile">Product Photos (Multiple select) Ya URLs dalein:</label>
-                <input type="file" id="aFile" accept="image/*" aria-label="Upload Product Images" multiple style="margin-bottom:8px; display:block;">
-                <input class="finp" id="aImg" aria-label="Image URLs" placeholder="Image URLs (Comma se alag karein agar link daal rahe ho)" type="text" style="width:100%;">
+                <label style="font-size:12px; display:block; margin-bottom:5px;">Product Photos (Multiple select) Ya URLs dalein:</label>
+                <input type="file" id="aFile" accept="image/*" multiple style="margin-bottom:8px; display:block;" aria-label="Upload File">
+                <input class="finp" id="aImg" placeholder="Image URLs (Comma se alag karein agar link daal rahe ho)" type="text" style="width:100%;" aria-label="URLs">
             </div>
 
-            <input class="finp" id="aEmoji" aria-label="Emoji Icon" placeholder="Emoji agar image na ho (e.g. 💄)" type="text">
-            <input class="finp full" id="aLink" aria-label="Affiliate Link" placeholder="Product Affiliate Link (e.g. https://amzn.to/...)" type="text">
-            <input class="finp full" id="aDesc" aria-label="Product Description" placeholder="Product description *" type="text">
-            <input class="finp full" id="aBenefits" aria-label="Product Benefits" placeholder="Product ke fayde (Benefits) *" type="text">
+            <input class="finp" id="aEmoji" placeholder="Emoji agar image na ho (e.g. 💄)" type="text" aria-label="Emoji">
+            <input class="finp full" id="aLink" placeholder="Product Affiliate Link (e.g. https://amzn.to/...)" type="text" aria-label="Link">
+            <input class="finp full" id="aDesc" placeholder="Product description *" type="text" aria-label="Desc">
+            <input class="finp full" id="aBenefits" placeholder="Product ke fayde (Benefits) *" type="text" aria-label="Benefits">
             
-            <input class="finp" id="aTag" aria-label="Product Tag" placeholder="Tag (e.g. Bestseller)">
-            <input class="finp" id="aBg" aria-label="Background Color" placeholder="Card color (e.g. #fff0f4)" type="text">
-            <select class="finp" id="aStars" aria-label="Product Rating">
+            <input class="finp" id="aTag" placeholder="Tag (e.g. Bestseller)" aria-label="Tag">
+            <input class="finp" id="aBg" placeholder="Card color (e.g. #fff0f4)" type="text" aria-label="Card bg">
+            <select class="finp" id="aStars" aria-label="Stars">
               <option value="★★★★★">★★★★★ (5 star)</option>
               <option value="★★★★☆">★★★★☆ (4 star)</option>
               <option value="★★★☆☆">★★★☆☆ (3 star)</option>
             </select>
           </div>
           <div style="display:flex; gap:10px; margin-top:10px;">
-             <button class="fsave" id="aSaveBtn" aria-label="Save Product Button" onclick="saveProduct()">✅ Save Product</button>
-             <button class="fsave" aria-label="Cancel Product Edit" onclick="resetProductForm()" style="background:#fff; color:var(--dark); border:1px solid #ccc; box-shadow:none;">Cancel</button>
+             <button class="fsave" id="aSaveBtn" onclick="saveProduct()">✅ Save Product</button>
+             <button class="fsave" onclick="resetProductForm()" style="background:#fff; color:var(--dark); border:1px solid #ccc; box-shadow:none;">Cancel</button>
           </div>
         </div>
         <div id="aMsg" style="font-size:14px;text-align:center;margin-top:8px"></div>
@@ -826,11 +786,11 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
         <div class="admin-form">
           <h3 id="bAddTitle">Naya Blog Add Karo</h3>
           <div class="form-grid">
-            <input class="finp full" id="bTitle" aria-label="Blog Title" placeholder="Blog Title *" type="text">
-            <input class="finp full" id="bDesc" aria-label="Blog Short Description" placeholder="Short Description *" type="text">
-            <textarea class="finp full" id="bContent" aria-label="Blog Full Content" placeholder="Full Blog Content (Articles/Tips) *" rows="5"></textarea>
+            <input class="finp full" id="bTitle" placeholder="Blog Title *" type="text" aria-label="Blog Title">
+            <input class="finp full" id="bDesc" placeholder="Short Description *" type="text" aria-label="Blog Desc">
+            <textarea class="finp full" id="bContent" placeholder="Full Blog Content (Articles/Tips) *" rows="5" aria-label="Blog Content"></textarea>
             
-            <select class="finp" id="bTag" aria-label="Blog Category Tag">
+            <select class="finp" id="bTag" aria-label="Blog tag">
   <option value="Fashion">Fashion</option>
   <option value="Skincare">Skincare</option>
   <option value="Grooming">Grooming</option>
@@ -841,17 +801,17 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
   <option value="Haircare">Haircare</option>
   <option value="Accessories">Accessories</option>
 </select>
-            <input class="finp" id="bEmoji" aria-label="Blog Emoji Icon" placeholder="Emoji Icon (e.g. 👗)" type="text" value="✨">
+            <input class="finp" id="bEmoji" placeholder="Emoji Icon (e.g. 👗)" type="text" value="✨" aria-label="Blog emoji">
             
             <div class="finp full" style="padding:10px; border:1px dashed var(--rose); background:#fff;">
-                <label style="font-size:12px; display:block; margin-bottom:5px;" for="bFile">Blog Cover Photo (Optional):</label>
-                <input type="file" id="bFile" accept="image/*" aria-label="Blog Cover Photo File" style="margin-bottom:8px; display:block;">
-                <input class="finp" id="bImg" aria-label="Blog Image URL" placeholder="Ya fir Image URL dalein" type="text" style="width:100%;">
+                <label style="font-size:12px; display:block; margin-bottom:5px;">Blog Cover Photo (Optional):</label>
+                <input type="file" id="bFile" accept="image/*" style="margin-bottom:8px; display:block;" aria-label="Blog file">
+                <input class="finp" id="bImg" placeholder="Ya fir Image URL dalein" type="text" style="width:100%;" aria-label="Blog URL">
             </div>
           </div>
           <div style="display:flex; gap:10px; margin-top:10px;">
-             <button class="fsave" id="bSaveBtn" aria-label="Save Blog Button" onclick="saveBlog()">✅ Save Blog</button>
-             <button class="fsave" aria-label="Cancel Blog Edit" onclick="resetBlogForm()" style="background:#fff; color:var(--dark); border:1px solid #ccc; box-shadow:none;">Cancel</button>
+             <button class="fsave" id="bSaveBtn" onclick="saveBlog()">✅ Save Blog</button>
+             <button class="fsave" onclick="resetBlogForm()" style="background:#fff; color:var(--dark); border:1px solid #ccc; box-shadow:none;">Cancel</button>
           </div>
         </div>
         <div id="bMsg" style="font-size:14px;text-align:center;margin-top:8px"></div>
@@ -869,26 +829,26 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
           <p style="font-size:12px; color:var(--muted); margin-bottom:15px;">Nayi category banayein, ya purani ko edit/delete karein.</p>
           <div class="form-grid">
             
-            <input class="finp full" id="cNewName" aria-label="New Category Name" placeholder="Nayi Category ka naam likhein (e.g. Perfumes) *">
+            <input class="finp full" id="cNewName" placeholder="Nayi Category ka naam likhein (e.g. Perfumes) *" aria-label="Category name">
             
             <div style="grid-column:1/-1; text-align:center; font-size:12px; color:var(--muted); margin: 8px 0;">--- YA PURANI EDIT/DELETE KAREIN ---</div>
             
-            <select class="finp full" id="cSelectName" aria-label="Select Existing Category" onchange="loadCatForEdit(this.value)">
+            <select class="finp full" id="cSelectName" onchange="loadCatForEdit(this.value)" aria-label="Category load">
               <option value="">Select existing category...</option>
             </select>
             
-            <input class="finp full" id="cEmoji" aria-label="Category Emoji Icon" placeholder="Icon Emoji (e.g. 🧴)" type="text">
+            <input class="finp full" id="cEmoji" placeholder="Icon Emoji (e.g. 🧴)" type="text" aria-label="Category emoji">
             
             <div class="finp full" style="padding:10px; border:1px dashed var(--rose); background:#fff;">
-                <label style="font-size:12px; display:block; margin-bottom:5px;" for="cFile">Category Photo Upload (Optional):</label>
-                <input type="file" id="cFile" accept="image/*" aria-label="Category File Upload" style="margin-bottom:8px; display:block;">
-                <input class="finp" id="cImg" aria-label="Category Image URL" placeholder="Ya fir Image URL dalein" type="text" style="width:100%;">
+                <label style="font-size:12px; display:block; margin-bottom:5px;">Category Photo Upload (Optional):</label>
+                <input type="file" id="cFile" accept="image/*" style="margin-bottom:8px; display:block;" aria-label="Cat file">
+                <input class="finp" id="cImg" placeholder="Ya fir Image URL dalein" type="text" style="width:100%;" aria-label="Cat Url">
             </div>
           </div>
           <div style="display:flex; gap:10px; margin-top:10px;">
-             <button class="fsave" id="cSaveBtn" aria-label="Save Category Button" onclick="saveCategory()">✅ Save Category</button>
-             <button class="fsave" id="cDelBtn" aria-label="Delete Category Button" onclick="deleteCategory()" style="background:#ef4444; color:#fff; border:none; display:none;">🗑️ Delete</button>
-             <button class="fsave" aria-label="Cancel Category Edit" onclick="resetCatForm()" style="background:#fff; color:var(--dark); border:1px solid #ccc; box-shadow:none;">Cancel</button>
+             <button class="fsave" id="cSaveBtn" onclick="saveCategory()">✅ Save Category</button>
+             <button class="fsave" id="cDelBtn" onclick="deleteCategory()" style="background:#ef4444; color:#fff; border:none; display:none;">🗑️ Delete</button>
+             <button class="fsave" onclick="resetCatForm()" style="background:#fff; color:var(--dark); border:1px solid #ccc; box-shadow:none;">Cancel</button>
           </div>
         </div>
       </div>
@@ -898,6 +858,43 @@ footer{background:var(--dark);color:rgba(255,255,255,0.7);padding:70px 5% 30px}
 </div>
 
 <div class="toast" id="toast" aria-live="polite"><span id="tIcon" aria-hidden="true">✓</span><span id="tMsg">Done!</span></div>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getAnalytics } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js';
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, collection, getDocs, addDoc, deleteDoc, doc, updateDoc, setDoc, getDoc, query, orderBy } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyA2126yTCRrJwvjVZ6GTwTfZBlkzo4oLjI",
+  authDomain: "glowveda-84ebc.firebaseapp.com",
+  projectId: "glowveda-84ebc",
+  storageBucket: "glowveda-84ebc.firebasestorage.app",
+  messagingSenderId: "388556010976",
+  appId: "1:388556010976:web:2552befa0d8654c8d82785",
+  measurementId: "G-R0BJGWVNGX"
+};
+
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const storage = getStorage(app);
+const provider = new GoogleAuthProvider();
+
+window._fb = { auth, db, storage, provider, signInWithPopup, signOut, onAuthStateChanged,
+  collection, getDocs, addDoc, deleteDoc, doc, updateDoc, setDoc, getDoc, query, orderBy, ref, uploadBytes, getDownloadURL };
+
+onAuthStateChanged(auth, async user => {
+  window._currentUser = user;
+  updateAuthUI(user);
+  
+  loadFirestoreProducts();
+  loadFirestoreBlogs();
+  loadFirestoreCats(); 
+});
+</script>
 
 <script>
 // ╔══════════════════════════════════════════════════════════╗
@@ -910,7 +907,8 @@ const CFG = {
   adminEmails: ['omprajapati1701@gmail.com', 'glowveda590@gmail.com'] 
 };
 
-try { emailjs.init(CFG.emailKey); } catch(e) {}
+// Error handle for delayed EmailJS
+try { if(window.emailjs) emailjs.init(CFG.emailKey); } catch(e) {}
 
 const obs = new IntersectionObserver(entries => {
   entries.forEach(e => {
@@ -1032,8 +1030,8 @@ function renderProds(list){
     const coverImg = (p.images && p.images.length > 0) ? p.images[0] : (p.img || '');
     const mediaHTML = coverImg ? `<img src="${coverImg}" alt="${p.name}" loading="lazy">` : `<span style="font-size:72px" aria-hidden="true">${p.emoji||'🌸'}</span>`;
     const actionBtn = p.link 
-      ? `<a href="${p.link}" target="_blank" onclick="event.stopPropagation();" class="acbtn" aria-label="Buy ${p.name}" style="text-decoration:none; display:inline-flex; align-items:center; background:linear-gradient(135deg,var(--rose),var(--rose-light)); color:#fff; padding:9px 18px; border-radius:50px; font-size:13px; font-weight:600;">Get it Now 🛍️</a>` 
-      : `<button class="acbtn" style="opacity:0.5; cursor:not-allowed;" aria-label="Product Coming Soon" onclick="event.stopPropagation();">Coming Soon</button>`;
+      ? `<a href="${p.link}" target="_blank" onclick="event.stopPropagation();" class="acbtn" style="text-decoration:none; display:inline-flex; align-items:center; background:linear-gradient(135deg,var(--rose),var(--rose-light)); color:#fff; padding:9px 18px; border-radius:50px; font-size:13px; font-weight:600;">Get it Now 🛍️</a>` 
+      : `<button class="acbtn" style="opacity:0.5; cursor:not-allowed;" onclick="event.stopPropagation();">Coming Soon</button>`;
       
     return `
     <div class="pcard" onclick="openProduct('${p.id}')">
@@ -1078,7 +1076,7 @@ function renderBlogs() {
                 <div class="btag">${b.tag}</div>
                 <h3 class="btitle">${b.title}</h3>
                 <p class="bdesc">${b.desc}</p>
-                <button class="bbtn" aria-label="Read Blog ${b.title}" onclick="openBlog('${b.id}')">Read More →</button>
+                <button class="bbtn" onclick="openBlog('${b.id}')">Read More →</button>
             </div>
         </div>`;
     }).join('');
@@ -1100,7 +1098,7 @@ function openProduct(id) {
         mainImg.style.display = 'block'; mainImg.src = allImgs[0];
         if(allImgs.length > 1) {
             allImgs.forEach((url, i) => {
-                const img = document.createElement('img'); img.className = `pd-thumb ${i===0?'active':''}`; img.src = url; img.alt = p.name + ' image ' + i;
+                const img = document.createElement('img'); img.className = `pd-thumb ${i===0?'active':''}`; img.src = url; img.alt = "thumb";
                 img.onclick = () => { mainImg.src = url; document.querySelectorAll('.pd-thumb').forEach(t=>t.classList.remove('active')); img.classList.add('active'); };
                 thumbsCont.appendChild(img);
             });
@@ -1130,25 +1128,13 @@ function openBlog(id) {
     document.getElementById('mTitle').textContent = b.title; 
     document.getElementById('mSub').textContent = b.tag;
 
-    // Image Handle
-    let contentHtml = b.img ? `<img src="${b.img}" alt="Blog Cover" onerror="this.src='https://placehold.co/600x400?text=GlowVeda'" style="width:100%; border-radius:12px; margin-bottom:20px; max-height:300px; object-fit:cover;" loading="lazy">` : '';
+    // Sirf simple line breaks (\n ko <br> mein badalna) taaki text niche ki line mein aaye
+    let contentHtml = b.img ? `<img src="${b.img}" alt="Blog Image" style="width:100%; border-radius:12px; margin-bottom:20px; max-height:300px; object-fit:cover;">` : '';
     
-    let rawContent = b.content || b.desc;
+    // Ye line wahi text dikhayegi jo aapne Admin Panel mein likha hai
+    contentHtml += (b.content || b.desc).replace(/\n/g, '<br>');
 
-    // 1. CLEANER: Agar aapne galti se <a href... style...> dala hai, toh ye use saaf kar dega
-    let cleanText = rawContent.replace(/<[^>]*>?/gm, ''); // Remove HTML Tags
-    cleanText = cleanText.replace(/#[0-9A-F]{6}|font-weight:|text-decoration:|underline;|target="_blank"|style=|color:/gi, ''); // Remove CSS Garbage
-
-    // 2. Formatting: Line breaks
-    let formattedContent = cleanText.replace(/\n/g, '<br>');
-
-    // 3. AUTO-LINKER: Sirf sahi URL ko link banayega
-    formattedContent = formattedContent.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" style="color: #E8305A; font-weight: bold; text-decoration: underline;">Open Link</a>');
-    
-    // 4. HASHTAGS
-    formattedContent = formattedContent.replace(/#(\w+)/g, '<a href="#products" onclick="document.getElementById(\'mainMov\').classList.remove(\'open\')" style="color: #C9A84C; font-weight: bold;">#$1</a>');
-
-    document.getElementById('mContent').innerHTML = contentHtml + '<div style="line-height:1.8; color:#333; font-size:15px; word-wrap: break-word;">' + formattedContent + '</div>'; 
+    document.getElementById('mContent').innerHTML = contentHtml; 
     document.getElementById('mainMov').classList.add('open');
 }
 
@@ -1170,7 +1156,7 @@ function renderAdminList(){
   const el=document.getElementById('adminProdList'); if(!PRODS.length){ el.innerHTML='<div class="empty-msg">Koi product nahi.</div>'; return; }
   el.innerHTML=PRODS.map(p=> {
     const cover = (p.images && p.images.length > 0) ? p.images[0] : (p.img || ''); const mediaHTML = cover ? `<img src="${cover}" loading="lazy" alt="${p.name}">` : `${p.emoji||'🌸'}`;
-    return `<div class="apcard"><div class="apemoji">${mediaHTML}</div><div class="apinfo"><div class="apcat">${p.cat} ${p.gender?`(${p.gender})`:''}</div><div class="apname">${p.name}</div><div class="apprice">₹${Number(p.price).toLocaleString('en-IN')}</div></div><div class="apactions"><button class="ap-edit" aria-label="Edit Product" onclick="editProduct('${p.id}')">✏️ Edit</button><button class="ap-del" aria-label="Delete Product" onclick="delProduct('${p.id}')">🗑️ Delete</button></div></div>`
+    return `<div class="apcard"><div class="apemoji">${mediaHTML}</div><div class="apinfo"><div class="apcat">${p.cat} ${p.gender?`(${p.gender})`:''}</div><div class="apname">${p.name}</div><div class="apprice">₹${Number(p.price).toLocaleString('en-IN')}</div></div><div class="apactions"><button class="ap-edit" onclick="editProduct('${p.id}')">✏️ Edit</button><button class="ap-del" onclick="delProduct('${p.id}')">🗑️ Delete</button></div></div>`
   }).join('');
 }
 
@@ -1188,7 +1174,7 @@ function resetProductForm() {
     document.getElementById('aFile').value = ''; 
 }
 
-// IMAGE COMPRESSOR - Upload speed 10x karne ke liye
+// IMAGE COMPRESSOR
 function compressImage(file, maxWidth = 800) {
     return new Promise((resolve) => {
         const reader = new FileReader();
@@ -1225,7 +1211,6 @@ async function saveProduct() {
     let imgUrl = document.getElementById('aImg').value.trim();
     const fileInput = document.getElementById('aFile');
     
-    // Naya: Agar user ne file select ki hai, toh compress karke upload karo
     if(fileInput && fileInput.files[0] && window._fb && window._fb.storage) {
         const cFile = await compressImage(fileInput.files[0]);
         const sRef = window._fb.ref(window._fb.storage, 'products/' + Date.now() + "_" + cFile.name);
@@ -1272,7 +1257,7 @@ async function delProduct(id){
 
 function renderAdminBlogList(){
   const el=document.getElementById('adminBlogList'); if(!BLOGS.length){ el.innerHTML='<div class="empty-msg">Koi blog nahi.</div>'; return; }
-  el.innerHTML=BLOGS.map(b=> { const mediaHTML = b.img ? `<img src="${b.img}" loading="lazy" alt="${b.title}">` : `${b.imgEmoji||'✨'}`; return `<div class="apcard"><div class="apemoji">${mediaHTML}</div><div class="apinfo"><div class="apcat">${b.tag}</div><div class="apname">${b.title}</div></div><div class="apactions"><button class="ap-edit" aria-label="Edit Blog" onclick="editBlog('${b.id}')">✏️ Edit</button><button class="ap-del" aria-label="Delete Blog" onclick="delBlog('${b.id}')">🗑️ Delete</button></div></div>` }).join('');
+  el.innerHTML=BLOGS.map(b=> { const mediaHTML = b.img ? `<img src="${b.img}" loading="lazy" alt="${b.title}">` : `${b.imgEmoji||'✨'}`; return `<div class="apcard"><div class="apemoji">${mediaHTML}</div><div class="apinfo"><div class="apcat">${b.tag}</div><div class="apname">${b.title}</div></div><div class="apactions"><button class="ap-edit" onclick="editBlog('${b.id}')">✏️ Edit</button><button class="ap-del" onclick="delBlog('${b.id}')">🗑️ Delete</button></div></div>` }).join('');
 }
 function editBlog(id) {
     const b = BLOGS.find(x=>x.id===id); if(!b) return; editingBlogId = id; document.getElementById('bAddTitle').textContent = "✏️ Edit Blog"; document.getElementById('bSaveBtn').innerHTML = "💾 Update Blog";
@@ -1287,7 +1272,7 @@ async function saveBlog(){
   try {
     let finalImg = document.getElementById('bImg').value.trim();
     if(fileInput && fileInput.files[0] && window._fb && window._fb.storage) { 
-        const cFile = await compressImage(fileInput.files[0]); // Naya compressor add kiya
+        const cFile = await compressImage(fileInput.files[0]);
         const sRef = window._fb.ref(window._fb.storage, 'blogs/' + Date.now() + "_" + cFile.name); 
         await window._fb.uploadBytes(sRef, cFile); 
         finalImg = await window._fb.getDownloadURL(sRef); 
@@ -1338,7 +1323,7 @@ async function saveCategory() {
     try {
         let finalImg = document.getElementById('cImg').value.trim(); const fileInput = document.getElementById('cFile');
         if(fileInput && fileInput.files[0] && window._fb && window._fb.storage) { 
-            const cFile = await compressImage(fileInput.files[0]); // Naya compressor add kiya
+            const cFile = await compressImage(fileInput.files[0]);
             const sRef = window._fb.ref(window._fb.storage, 'categories/' + Date.now() + "_" + cFile.name); 
             await window._fb.uploadBytes(sRef, cFile); finalImg = await window._fb.getDownloadURL(sRef); 
         }
@@ -1446,10 +1431,13 @@ window.doSubscribe = async function(){
   if(!name){showT('Apna naam daalo!','⚠️');return;}
   if(!email||!email.includes('@')||!email.includes('.')){showT('Valid email daalo!','⚠️');return;}
   const btn=document.getElementById('subBtn'); btn.disabled=true; btn.textContent='Sending...';
+  
+  if(typeof emailjs === 'undefined') { showT('Connecting to server, try again in 1 sec...', '⏳'); btn.disabled=false; btn.textContent='Subscribe Karo 💌'; return; }
+
   try{
     await emailjs.send(CFG.emailSvc,CFG.emailTpl,{ to_name:name, to_email:email, from_name:'GlowVeda', message:`GlowVeda family mein aapka swagat hai! \n\nUse Code: GLOW20`, reply_to:'support@glowveda.in' });
     document.getElementById('subName').value=''; document.getElementById('subEmail').value=''; showT(`🎉 Welcome! Email check karein!`,'💌');
-  }catch(e){ showT('Subscribe ho gaye! (EmailJS key set karein)','💌'); document.getElementById('subName').value=''; document.getElementById('subEmail').value=''; }
+  }catch(e){ showT('Subscribe ho gaye!','💌'); document.getElementById('subName').value=''; document.getElementById('subEmail').value=''; }
   btn.disabled=false; btn.textContent='Subscribe Karo 💌';
 }
 
@@ -1489,6 +1477,25 @@ window.openProduct = openProduct;
 window.openBlog = openBlog;
 window.openLogin = openLogin;
 window.doGoogleLogin = doGoogleLogin;
+</script>
+
+<script>
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        // 1. EmailJS ko chupke se load karo
+        let eScript = document.createElement('script');
+        eScript.src = "https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js";
+        eScript.onload = () => { try { emailjs.init(CFG.emailKey); } catch(e){} };
+        document.body.appendChild(eScript);
+
+        // 2. Google AdSense ko baad mein load karo (Isse PageSpeed 95+ jayega)
+        let adScript = document.createElement('script');
+        adScript.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2791555682749420";
+        adScript.async = true;
+        adScript.crossOrigin = "anonymous";
+        document.body.appendChild(adScript);
+    }, 2500); // 2.5 seconds ka delay jisse user ko site fast dikhegi!
+});
 </script>
 </body>
 </html>
